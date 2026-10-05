@@ -227,7 +227,7 @@ def landing():
     with st.container(key="editorial_panel"):
         left, right = st.columns([1, 1.05], gap="large", vertical_alignment="center")
         with left:
-            st.markdown('<div class="section-title" role="heading" aria-level="2">Welcome to<br>Viv\' Operations Cleaner</div><p class="editorial-copy">A Python powered website auditing tool that checks links, page structure, metadata, accessibility signals, and technical issues. Findings include supporting evidence and practical fixes, with filters, saved reports, and progress tracking for easier review.</p><p class="editorial-copy">Built for operations teams, administrators, freelancers and small businesses. Keep the details in focus, then take your work into a dashboard or report.</p><p class="editorial-note"</p>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title" role="heading" aria-level="2">Welcome to<br>Viv\'s Operations Cleaner</div><p class="editorial-copy">A Python powered website auditing tool that checks links, page structure, metadata, accessibility signals, and technical issues. Findings include supporting evidence and practical fixes, with filters, saved reports, and progress tracking for easier review.</p><p class="editorial-copy">Built for operations teams, administrators, freelancers and small businesses. Keep the details in focus, then take your work into a dashboard or report.</p><p class="editorial-note"</p>', unsafe_allow_html=True)
         with right:
             with st.container(key="source_panel"):
                 st.markdown('<div id="import-dataset"></div>', unsafe_allow_html=True)
