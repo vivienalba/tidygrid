@@ -1,12 +1,8 @@
-# Optional font binaries
+# Bundled web fonts
 
-Requested fonts were not supplied. Arial is the temporary web fallback. Place licensed WOFF2 files here and restart Streamlit:
+Font files live in `static/fonts`, served by Streamlit static serving and embedded into offline HTML exports.
 
-- HKGrotesk-Regular.woff2 (400)
-- HKGrotesk-Semibold.woff2 (600)
-- HKGrotesk-Bold.woff2 (700)
-- ProximaNova-Regular.woff2 (400)
-- ProximaNova-Semibold.woff2 (600)
-- ProximaNova-Bold.woff2 (700)
+- HK Grotesk Regular, Semibold, Bold: Hanken Design, https://github.com/HankenDesignCo/HK-Grotesk — SIL Open Font License 1.1, included as HK-Grotesk-OFL.txt.
+- Metropolis Regular, Semibold, Bold: Typehaus distribution, https://github.com/typehaus/metropolis — public domain / Unlicense, included as Metropolis-LICENSE.md.
 
-No external font provider is used. Licenses must permit web embedding. PDFs use Helvetica and Excel uses Arial.
+Each weight is a genuine WOFF2 font. Metropolis replaces Proxima Nova. No remote font request or JavaScript build is needed. Arial remains only a fallback. PDF reports use Helvetica and Excel reports use Arial.

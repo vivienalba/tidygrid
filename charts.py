@@ -9,8 +9,8 @@ def show_chart(chart):
     st.altair_chart(
         chart.configure_view(stroke=None)
         .configure_axis(
-            labelFont="Proxima Nova, Arial, sans-serif",
-            titleFont="Proxima Nova, Arial, sans-serif",
+            labelFont="Metropolis, Arial, sans-serif",
+            titleFont="Metropolis, Arial, sans-serif",
             labelFontSize=11,
             titleFontSize=12,
             gridColor="#cdcdcd",
@@ -19,20 +19,20 @@ def show_chart(chart):
             titleColor="#000000",
         )
         .configure_legend(
-            labelFont="Proxima Nova, Arial, sans-serif", titleFont="Proxima Nova, Arial, sans-serif", labelFontSize=11, orient="bottom"
+            labelFont="Metropolis, Arial, sans-serif", titleFont="Metropolis, Arial, sans-serif", labelFontSize=11, orient="bottom"
         )
         .properties(height=285),
         width="stretch",
     )
 
 
-def grouped_chart(frame, style="Bar"):
+def grouped_chart(frame, style="Bar", integer=False):
     if frame.empty:
         st.info("No valid values match these filters.")
         return
     shown = frame.head(20)
     base = alt.Chart(shown).encode(
-        tooltip=["Group:N", alt.Tooltip("Value:Q", format=",.2f")]
+        tooltip=["Group:N", alt.Tooltip("Value:Q", format=",.0f" if integer else ",.2f")]
     )
     if style == "Donut" and (shown.Value >= 0).all():
         chart = base.mark_arc(innerRadius=70, stroke="white", strokeWidth=2).encode(
@@ -41,7 +41,7 @@ def grouped_chart(frame, style="Bar"):
         )
     else:
         chart = base.mark_bar(color=COLORS[0], cornerRadiusEnd=3).encode(
-            x=alt.X("Value:Q", title=None), y=alt.Y("Group:N", sort="-x", title=None)
+            x=alt.X("Value:Q", title=None, axis=alt.Axis(tickMinStep=1, format=",.0f") if integer else alt.Axis()), y=alt.Y("Group:N", sort="-x", title=None)
         )
     show_chart(chart)
     if len(frame) > 20:

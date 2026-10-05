@@ -2,6 +2,8 @@
 
 import base64
 import html
+from functools import lru_cache
+import pandas as pd
 from pathlib import Path
 import streamlit as st
 import streamlit.components.v2 as components_v2
@@ -10,7 +12,11 @@ from typography import font_css
 ROOT = Path(__file__).resolve().parent
 _presentation = None
 _COMPONENT_CSS=(ROOT/'components/presentation/presentation.css').read_text()
-_COMPONENT_JS=(ROOT/'components/presentation/vendor/anime.umd.min.js').read_text()+'\n'+(ROOT/'components/presentation/presentation.js').read_text()
+# Streamlit v2 executes ES modules in strict mode. Use GSAP's CommonJS branch
+# with local exports rather than its classic-script Window assignment.
+_GSAP_SOURCE=(ROOT/'components/presentation/vendor/gsap.min.js').read_text()
+_COMPONENT_JS="const tidyGSAP={};\n(function(exports,module){\n"+_GSAP_SOURCE+"\n})(tidyGSAP,{exports:tidyGSAP});\nglobalThis.gsap=tidyGSAP.gsap;\n"+(ROOT/'components/presentation/vendor/anime.umd.min.js').read_text()+'\n'+(ROOT/'components/presentation/presentation.js').read_text()
+
 
 
 def install_styles():
@@ -20,25 +26,40 @@ def install_styles():
     st.markdown('<style>'+font_css()+(ROOT/'assets/design-system.css').read_text()+'</style>',unsafe_allow_html=True)
 
 
+@lru_cache(maxsize=32)
 def asset(name):
     path = ROOT / "assets" / name
-    mime = {".svg": "image/svg+xml", ".jpeg": "image/jpeg", ".jpg": "image/jpeg"}.get(path.suffix.lower(), "image/png")
+    mime = {".svg": "image/svg+xml", ".webp": "image/webp", ".jpeg": "image/jpeg", ".jpg": "image/jpeg"}.get(path.suffix.lower(), "image/png")
     return f"data:{mime};base64," + base64.b64encode(path.read_bytes()).decode()
 
 
 def centered_dataframe(data, **kwargs):
-    """Use native column alignment so canvas-rendered tables remain interactive."""
-    if kwargs.pop("static", False):
-        return st.table(data.style.hide(axis="index") if hasattr(data, "style") else data, border="horizontal", width="stretch")
-    frame = getattr(data, "data", data) if not hasattr(data, "columns") else data
-    supplied = kwargs.pop("column_config", {}) or {}
-    config = {}
-    for key in ["_index", *list(getattr(frame, "columns", [])), *supplied]:
-        value = supplied.get(key)
-        if isinstance(value, str):
-            value = {"label": value}
-        config[key] = {**(value or {}), "alignment": "center"}
-    return st.dataframe(data, column_config=config, **kwargs)
+    """Reference styling for results; native grid tools remain available."""
+    static=kwargs.pop("static",False)
+    frame=getattr(data,"data",data) if not hasattr(data,"columns") else data
+    supplied=kwargs.pop("column_config",{}) or {}
+    config={}
+    for key in ["_index",*list(getattr(frame,"columns",[])),*supplied]:
+        value=supplied.get(key)
+        if isinstance(value,str):value={"label":value}
+        config[key]={**(value or {}),"alignment":"center"}
+    styled=frame.style.set_properties(**{"color":"#000000","background-color":"#ffffff","text-align":"center"})
+    if len(frame.columns):
+        styled=styled.set_properties(subset=[frame.columns[0]],**{"background-color":"#d4c2ef","color":"#000000","font-weight":"600"})
+    # Tables in analytical results follow the supplied tabulation reference.
+    # The searchable dataset preview stays a native, virtualized grid.
+    if static or not kwargs.get("key"):
+        display=frame.rename(columns={k:(v.get("label") or k) for k,v in config.items() if k!="_index"})
+        styled=display.style.hide(axis="index").set_properties(**{"color":"#000000","background-color":"#ffffff","text-align":"center"})
+        if len(display.columns):styled=styled.set_properties(subset=[display.columns[0]],**{"background-color":"#d4c2ef","font-weight":"600"})
+        numeric=display.select_dtypes(include="number").columns
+        styled=styled.format({c:lambda x: "—" if pd.isna(x) else f"{x:,.2f}" if not float(x).is_integer() else f"{int(x):,}" for c in numeric},na_rep="—")
+        st.table(styled,border=True,width="stretch")
+        if not static:
+            with st.expander("Sort and explore this table"):
+                return st.dataframe(frame,column_config=config,**kwargs)
+        return None
+    return st.dataframe(styled,column_config=config,**kwargs)
 
 
 def logo(dark=False):
@@ -68,11 +89,22 @@ def motion(mode,page):
 
 
 def illustration(name,alt,key,height=300):
-    _presentation(data={'kind':'art','src':asset(name),'alt':alt,'height':height,'fonts':font_css()},key=key)
+    _presentation(data={'kind':'art','src':asset(name),'alt':alt,'height':height,'fonts':font_css(),'animate':first_reveal(key)},key=key)
+
+
+def first_reveal(key):
+    seen=st.session_state.setdefault("_motion_seen",set())
+    first=key not in seen
+    seen.add(key)
+    return first
+
+
+def result_summary(title,items,key):
+    _presentation(data={'kind':'summary','title':title,'items':[dict(value=str(value),label=label,detail=detail) for value,label,detail in items],'fonts':font_css(),'animate':first_reveal(key)},key=key)
 
 
 def render_summary(stats,key):
-    _presentation(data={'kind':'summary','items':[dict(value=f'{int(n):,}',label=label,detail=detail,warning=warn) for n,label,detail,warn in stats],'fonts':font_css()},key=key)
+    result_summary("Your workbook in numbers" if key.startswith("workbook") else "Your data in numbers",[(f"{int(n):,}",label,detail) for n,label,detail,warn in stats],key)
 
 
 def csv_summary(report):

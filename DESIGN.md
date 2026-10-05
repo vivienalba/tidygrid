@@ -13,10 +13,12 @@ HOME.svg guides the yellow illustrated hero, cream editorial sections, white cap
 | r6 | Report preparation and introduction |
 | r7 | Export completion |
 
-Original SVGs remain intact. Derived crops remove rectangular backgrounds and unwanted reference labels/arrows while preserving vector quality.
+Original SVGs remain intact. Simple graphic crops retain vector quality. Complex embedded-image SVGs are rendered at high resolution into lossless WebP, avoiding repeated filter compositing. The supplied transparent caretaker and walking PNGs are converted losslessly at their original dimensions.
 
-Cream #f5f7ee surrounds white working surfaces. Purple #72559f is the sidebar and Ask surface, lavender #d4c2ef supports summaries/completion, and yellow #f6d46b identifies landing emphasis, table headers and active navigation. Blue #205182 indicates focus/selection. Neutral rules use #cdcdcd; labels are black. Warm #fff3db supports disclosures/answers, pink #faf4f8 and #f4f4f4 support quiet statuses. Gradients are selective in finance scenarios and dashboard artwork.
+The additional table screenshots guide two distinct structures: lavender editorial result strips with ruled metric columns, and sharp comparison tables with yellow headers, lavender row labels, white data cells and black grid lines. Values come from the actual dataset and selected period; illustrative financial figures and years from the reference are not copied into results. Month-to-month Change is unavailable when the baseline is zero or either value is unknown.
 
-Heading stack: HK Grotesk, Arial. Body/table stack: Proxima Nova, Arial. Requested font binaries are absent.
+Cream #f5f7ee surrounds white working surfaces. Purple #72559f is the sidebar and Ask surface, lavender #d4c2ef supports summaries, and yellow #f6d46b identifies landing emphasis, table headers and active navigation. Blue #205182 indicates focus/selection. Labels and table text are black; purple surfaces use white foregrounds. Gradients remain concentrated in artwork and scenarios.
 
-Anime.js animate, createTimeline, createScope and stagger operate within supported Streamlit v2 components. Graphic reveals take 340ms, metrics 220ms with 25ms staggering, comparisons 180ms; easing out(3). Hover movement is limited to 3px on graphics and 1px on controls. Scopes/listeners clean up and respond to reduced motion. Tables remain stable. No decorative arrows or middle-dot separators are added.
+HK Grotesk headings and Metropolis body/table text are served locally in weights 400, 600 and 700. Both genuine font families and their licenses are included.
+
+Anime.js createScope/animate owns the 150ms metric opacity reveal. GSAP matchMedia and scoped tweens own 240ms illustration fades. Engines never animate the same property on the same target. IntersectionObserver starts visible entrances; session state prevents replaying them on filters and navigation. Content fingerprints prevent unchanged component DOM from being rebuilt. Cleanup disconnects observers, removes listeners and reverts scopes/tweens. Reduced motion disables reveals. There are no ambient loops, illustration hover transforms or table entrances. No decorative arrows or middle-dot separators are added.

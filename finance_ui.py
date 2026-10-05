@@ -7,7 +7,7 @@ from datetime import date
 import altair as alt
 import pandas as pd
 import streamlit as st
-from ui import centered_dataframe
+from ui import centered_dataframe, result_summary
 from analytics import COLORS, parse_amounts
 from charts import show_chart
 from finance import (
@@ -94,7 +94,7 @@ def render_finance(context):
     st.caption(
         "Compare months, track bills, and enter your own income and net-worth snapshots. These figures describe your uploaded records."
     )
-    with st.expander("Map This Dataset", expanded=not bool(state["imports"])):
+    with st.expander("Map This Dataset", expanded=False):
         mapping = mapping_controls(data, "finance_base", True, settings.get("mapping"))
         left, right = st.columns(2)
         with left:
@@ -247,7 +247,7 @@ def render_finance(context):
     )
     if ledger.empty:
         st.info(
-            "Map an Amount column or add files to start your monthly dashboard. You can also load the Expenses + Bills sample from the sidebar."
+            "Map an Amount column or add files to start your monthly dashboard. You can also load the Expenses + Bills sample from Source & Import Settings."
         )
         return
     with st.expander("Income & Net Worth  /  Monthly Entries"):
@@ -309,29 +309,21 @@ def render_finance(context):
     state["selected"] = selected
     chosen = ledger.loc[ledger.Month.isin(selected)].copy()
     snapshot = monthly_snapshot(ledger, state["snapshots"], selected)
-    left, right = st.columns([2.2, 1], gap="large")
-    with left:
-        st.markdown("### Month Snapshot")
-        centered_dataframe(
-            snapshot,
-            width="stretch",
-            hide_index=True,
-            column_config={
-                col: st.column_config.NumberColumn(col, format="%.2f")
-                for col in snapshot.columns
-                if col != "Month"
-            },
-        )
-        st.caption(
-            "Blank = not recorded / no valid coverage. Cash flow uses income minus expenses minus paid bills. It is a recorded-data calculation, not your verified bank balance."
-        )
-    with right:
-        total = chosen.loc[chosen.Type.eq("Expense"), "Amount"].sum(min_count=1)
-        value = f"{total:,.0f}" if pd.notna(total) else "—"
-        st.markdown(
-            f'<div class="dark-statement"><div class="eyebrow">RECORDED EXPENSES  /  {currency}</div><div class="statement-number">{value}</div><p>{len(selected)} months selected.<br>Amounts are calculated from the imported records.</p></div>',
-            unsafe_allow_html=True,
-        )
+    def money(values):
+        n=values.sum(min_count=1)
+        return f"{n:,.0f}" if pd.notna(n) else "—"
+    result_summary("The period in numbers",[(money(snapshot.Income),"Income recorded",currency+" / entered snapshots"),(money(snapshot.Expenses),"Expenses",currency+" / selected months"),(money(snapshot.Bills),"Bills recorded",currency+" / paid and unpaid")],"finance_summary")
+    st.markdown("### Compare the details")
+    comparison=snapshot.set_index("Month").T.rename_axis("Measure").reset_index()
+    if len(selected)==2:
+        earlier,later=selected
+        def change(row):
+            before,after=row[earlier],row[later]
+            if pd.isna(before) or pd.isna(after) or before==0:return "—"
+            return f"{(after-before)/abs(before)*100:+.1f}%"
+        comparison["Change"]=comparison.apply(change,axis=1)
+    centered_dataframe(comparison,width="stretch",hide_index=True)
+    st.caption("Change compares the two selected months. A dash means no recorded value or no usable comparison baseline. Cash flow uses income minus expenses minus paid bills; it is not a verified bank balance.")
     net = snapshot[["Month", "Net Worth"]].copy()
     net["Net Worth"] = pd.to_numeric(net["Net Worth"])
     c1, c2 = st.columns(2, gap="large")

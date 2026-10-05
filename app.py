@@ -31,6 +31,7 @@ from ui import (
     csv_summary,
     eyebrow,
     install_styles,
+    result_summary,
     illustration,
     logo,
     motion,
@@ -215,7 +216,7 @@ def landing():
     with st.container(key="hero"):
         artwork, copy = st.columns(2, gap="large", vertical_alignment="center")
         with artwork:
-            illustration("reference-r3.svg", "Illustrated caretaker at work outdoors", "hero_art", 380)
+            illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
             eyebrow("YOUR OPERATIONS, IN GOOD ORDER")
             st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1><p class="hero-copy">A little order makes room for bigger things. Clean your spreadsheets, explore the patterns, and turn everyday operations into useful reports.</p>', unsafe_allow_html=True)
@@ -254,7 +255,7 @@ def landing():
         items = [("Bring your data", "Upload a CSV, TSV or Excel workbook."), ("Choose what changes", "Set cleaning rules and review your Excel ranges."), ("Look a little closer", "Compare values, filter records and build a view."), ("Take it with you", "Download cleaned data, dashboards and reports.")]
         for i, (col, (title, copy)) in enumerate(zip(st.columns(4, gap="large"), items)):
             with col:
-                illustration(f"workflow-{i}.svg", title, f"workflow_art_{i}", 140)
+                illustration(f"art/workflow-{i}.webp", title, f"workflow_art_{i}", 140)
                 st.markdown(f'<div class="workflow-title" role="heading" aria-level="3">{title}</div><p class="workflow-copy">{copy}</p>', unsafe_allow_html=True)
     with st.container(key="work_anywhere"):
         left, right = st.columns([1, 1.2], gap="large", vertical_alignment="center")
@@ -269,7 +270,7 @@ def landing():
             st.write("Map your activity dates and statuses, choose a period, and review workload, completion and overdue records. Export an Excel or PDF report.")
             st.button("Try the operations sample", key="landing_reports", type="primary", on_click=load_sample, args=("Operations",))
         with right:
-            illustration("reference-r6.svg", "Illustrated caretaker and cat", "ready_art", 240)
+            illustration("art/caretaker.webp", "Illustrated caretaker and cat", "ready_art", 240)
 
 
 def workbook_context(raw, filename, digest, page):
@@ -629,74 +630,34 @@ def clean_page(ctx):
 
 
 def chart_builder(ctx):
-    data = ctx["analysis_data"]
-    left, right = st.columns([2.4, 1], gap="large")
-    with left:
-        with st.container(key="chart_panel"):
-            a, b = st.columns(2)
-            with a:
-                group = select("Group By", list(data.columns), "chart_group")
-            with b:
-                aggregation = st.selectbox(
-                    "Calculate", ["Count", "Sum", "Average"], key="chart_aggregation"
-                )
-            measure = None
-            if aggregation != "Count":
-                measure = select("Measure", list(data.columns), "chart_measure")
-            with st.expander("Filter Records"):
-                column = select(
-                    "Filter Column",
-                    ["None"] + list(data.columns),
-                    "chart_filter_column",
-                )
-                if column != "None":
-                    choices = sorted(
-                        data[column]
-                        .astype("string")
-                        .fillna("(Missing)")
-                        .unique()
-                        .tolist()
-                    )
-                    values = st.multiselect(
-                        "Include Values",
-                        choices,
-                        default=choices,
-                        key="chart_filter_values_" + str(column),
-                    )
-                    data = data.loc[
-                        data[column].astype("string").fillna("(Missing)").isin(values)
-                    ]
-            style = st.radio(
-                "Chart Style", ["Bar", "Donut"], horizontal=True, key="chart_style"
-            )
-            grouped, invalid = grouped_data(data, group, measure, aggregation)
-            grouped_chart(grouped, style)
-            if style == "Donut" and (grouped.Value < 0).any():
-                st.caption(
-                    "Negative values are shown as a bar chart so their sign remains visible."
-                )
-            if invalid:
-                st.caption(
-                    f"{invalid:,} missing or invalid measures excluded. Choose a column representing a measure, such as an amount."
-                )
-            st.download_button(
-                "Export Chart Summary CSV",
-                grouped.to_csv(index=False).encode("utf-8-sig"),
-                "tidygrid_chart_summary.csv",
-                "text/csv",
-                on_click="ignore",
-            )
-    with right:
-        st.markdown(
-            f'<div class="dark-statement chart-view-summary"><div class="eyebrow">IN THIS VIEW</div><div class="statement-number">{len(data):,}</div><p>Records grouped by {html.escape(str(group))}.<br>Your filters apply to this chart.</p></div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<p class="chart-view-note">Choose Count for record volume. Sum and Average use valid numeric amounts only.</p>', unsafe_allow_html=True
-        )
-        illustration("work-flag.svg", "Hand-drawn flag", "chart_art", 120)
+    data=ctx["analysis_data"]
+    with st.container(key="chart_controls"):
+        a,b,c=st.columns([1.4,1,1],gap="medium")
+        with a:group=select("Group By",list(data.columns),"chart_group")
+        with b:aggregation=st.selectbox("Calculate",["Count","Sum","Average"],key="chart_aggregation")
+        with c:style=st.radio("Chart Style",["Bar","Donut"],horizontal=True,key="chart_style")
+        measure=None
+        if aggregation!="Count":measure=select("Measure",list(data.columns),"chart_measure")
+        with st.expander("Filter Records"):
+            column=select("Filter Column",["None"]+list(data.columns),"chart_filter_column")
+            if column!="None":
+                choices=sorted(data[column].astype("string").fillna("(Missing)").unique().tolist())
+                values=st.multiselect("Include Values",choices,default=choices,key="chart_filter_values_"+str(column))
+                data=data.loc[data[column].astype("string").fillna("(Missing)").isin(values)]
+    grouped,invalid=grouped_data(data,group,measure,aggregation)
+    result_summary("The view in numbers",[(f"{len(data):,}","Records","After your filters"),(f"{len(grouped):,}","Groups",str(group).replace("_"," ")),(f"{invalid:,}","Invalid measures","Excluded from calculation")],"chart_summary")
+    with st.container(key="chart_canvas"):
+        chart,notes=st.columns([3,1],gap="large")
+        with chart:
+            st.markdown("### "+aggregation+" by "+str(group).replace("_"," "))
+            grouped_chart(grouped,style,integer=aggregation=="Count")
+            if style=="Donut" and (grouped.Value<0).any():st.caption("Negative values use a bar chart to preserve their sign.")
+        with notes:
+            st.markdown('<div class="chart-notes"><h3>Reading this view</h3><p>Count shows record volume. Sum and Average use valid numeric values.</p><p>Your selected filters apply to both the chart and its summary.</p></div>',unsafe_allow_html=True)
+            if invalid:st.caption(f"{invalid:,} missing or invalid measures excluded.")
+            st.download_button("Export Chart Summary CSV",grouped.to_csv(index=False).encode("utf-8-sig"),"tidygrid_chart_summary.csv","text/csv",on_click="ignore",width="stretch")
     with st.expander("Chart Data"):
-        centered_dataframe(grouped, width="stretch", hide_index=True)
+        centered_dataframe(grouped,width="stretch",hide_index=True)
 
 
 def expenses(ctx):
@@ -794,8 +755,8 @@ def expenses(ctx):
 def dashboard_page(ctx):
     page_intro(
         "DASHBOARD",
-        "Find the Story in Your Data.",
-        "A focused chart, an expense breakdown, or a complete monthly ledger.",
+        "A clear view of your operations",
+        "Choose a view, refine your records, and review the figures before exporting.",
     )
     file_line(ctx)
     st.session_state.setdefault(
@@ -888,7 +849,7 @@ def reports_page(ctx):
             saved[key] = st.session_state[key]
     with right:
         if not mapping["Activity date"] or not mapping["Status"]:
-            illustration("reference-r6.svg", "Illustrated caretaker reviewing work", "report_empty_art", 250)
+            illustration("art/caretaker.webp", "Illustrated caretaker reviewing work", "report_empty_art", 250)
             st.info(
                 "Map Activity Date and Status to build a report. Optional fields add workload, due-date and value summaries."
             )
@@ -947,10 +908,8 @@ def reports_page(ctx):
         st.session_state["_latest_report"] = report
         m = report["metrics"]
         with st.container(key="report_header"):
-            st.markdown(
-                f'<div class="eyebrow" style="color:#72559f">{kind.upper()} REPORT</div><div class="report-title">{html.escape(title)}</div><div class="report-period">{report["start"]} to {report["end"]}  /  Cutoff {report["as_of"]}</div><div class="report-number">{m["Activities"]:,}</div><div class="report-small">Activities in the period<br>{m["Completed"]:,} completed  /  {m["Open"]:,} open  /  {m["Overdue"]:,} overdue</div>',
-                unsafe_allow_html=True,
-            )
+            st.markdown(f'<div class="eyebrow">{kind.upper()} REPORT</div><h2 class="report-title">{html.escape(title)}</h2><p class="report-period">{report["start"]} to {report["end"]} / Cutoff {report["as_of"]}</p>',unsafe_allow_html=True)
+        result_summary("The period in numbers",[(f'{m["Activities"]:,}',"Activities",f'{m["Open"]:,} open'),(f'{m["Completed"]:,}',"Completed","Within the reporting cutoff"),(f'{m["Overdue"]:,}',"Overdue","At the reporting cutoff")],"report_summary")
         a, b = st.columns(2)
         with a:
             st.download_button(
@@ -1044,7 +1003,7 @@ def export_page(ctx):
                 unsafe_allow_html=True,
             )
         with b:
-            illustration("reference-r7.svg", "Illustrated person walking with a dog", "export_art", 195)
+            illustration("art/walking.webp", "Illustrated person walking with a dog", "export_art", 195)
             st.markdown('<div class="export-file">' + html.escape(ctx["filename"]) + '</div>', unsafe_allow_html=True)
             excel = ctx["kind"] == "xlsx"
             extension = "xlsx" if excel else "csv"

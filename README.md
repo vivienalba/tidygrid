@@ -11,11 +11,11 @@ python -m streamlit run app.py
 
 ## Deploy
 
-Upload every extracted file and folder to the root of `vivienalba/tidygrid`, including `assets`, `components`, and `.streamlit`. In Streamlit Community Cloud select branch `main`, main file **app.py**, and Python 3.12. The ZIP is a flat project root. No JavaScript build, CDN or API key is required. This delivery does not automatically publish to GitHub or Streamlit Cloud.
+Upload every extracted file and folder to the root of `vivienalba/tidygrid`, including `assets`, `static`, `components`, and `.streamlit`. In Streamlit Community Cloud select branch `main`, main file **app.py**, and Python 3.12. The ZIP is a flat project root. No JavaScript build, CDN or API key is required. This delivery does not automatically publish to GitHub or Streamlit Cloud.
 
 ## Fonts
 
-The requested HK Grotesk and Proxima Nova binaries were not supplied. **Arial is the temporary web fallback.** Add licensed files using the filenames in `assets/fonts/README.md`, then restart the app. Fonts are embedded locally in the app, components and offline dashboard. PDF reports use Helvetica; Excel reports use Arial.
+HK Grotesk headings and Metropolis body/table fonts are included in `static/fonts`, in regular, semibold and bold weights. The uploaded font ZIPs were unavailable, so the actual fonts were obtained from Hanken Design and Typehaus public distributions. Their licenses are included. Streamlit static serving is enabled in `.streamlit/config.toml`; no font CDN is used. The offline HTML embeds the fonts. PDF reports use Helvetica; Excel reports use Arial. See `assets/fonts/README.md` for provenance.
 
 ## Preserved features
 
@@ -31,9 +31,11 @@ Ask TidyGrid uses local dataset commands. Open-ended generative AI is not connec
 
 ## Interface limits
 
-All eight original SVG references are retained under `assets/references`. Illustrations are vector crops with rectangular backgrounds and unwanted arrows omitted. Tables have sharp edges, neutral rules and centered values. Streamlit native canvas headers keep their native alignment: the supported API does not expose reliable header centering. Static table headers are centered.
+All eight original SVG references are retained under `assets/references`. Detailed illustrations use lossless WebP exports rather than repeatedly decoding the SVGs’ embedded raster/filter stacks. Supplied caretaker and walking illustrations retain their original pixel dimensions and transparency. Simple graphics remain vector assets.
 
-Bundled Anime.js v4.5.0 runs within Streamlit's supported v2 component lifecycle with cleanup. Illustrations, summary reveals and comparison values use restrained motion. Native controls use short CSS feedback. Reduced-motion preferences disable motion. Server reruns prevent continuous whole-page morphing; supported component reveals provide the closest reliable transition. The permanent sidebar remains available at small widths; tables scroll horizontally.
+Result summaries follow the lavender “year in numbers” reference. Tabulated results use yellow headers, a lavender label column, centered text, sharp edges and solid black grid lines. A “Sort and explore this table” disclosure retains the interactive data grid for results. Dataset previews keep the native searchable grid; Streamlit controls its canvas header alignment.
+
+Bundled Anime.js v4.5.0 owns metric reveals; GSAP v3.15.0 owns illustration fades. Both run within the supported Streamlit v2 component lifecycle, with scoped cleanup and reduced-motion support. Entrances run once per component per session and only when visible. Unchanged components are not rebuilt on ordinary reruns. Tables and chart controls remain stable. Native controls have short color feedback. Streamlit server reruns still govern page navigation; continuous whole-page morphs are not available. The permanent sidebar remains available at small widths and tables scroll horizontally.
 
 ## Verify
 

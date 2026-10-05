@@ -332,7 +332,7 @@ def dashboard_html(ledger, snapshots, currency, months):
     root = Path(__file__).parent
     template = (root / "assets/dashboard-export.html").read_text()
     return (
-        template.replace("__STYLE__", (root / "assets/dashboard-export.css").read_text().replace("__FONTS__", font_css()))
+        template.replace("__STYLE__", (root / "assets/dashboard-export.css").read_text().replace("__FONTS__", font_css(embed=True)))
         .replace("__DATA__", safe)
         .replace(
             "__ANIME__",
