@@ -225,16 +225,26 @@ def landing():
         with artwork:
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
-                       st.markdown(
+            st.markdown(
                 '<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1>',
                 unsafe_allow_html=True,
             )
             with st.container(key="hero_actions"):
-                a = st.column(1)
+                a, b = st.columns(2)
                 with a:
-                    st.button("Explore the sample", type="primary", key="hero_sample", on_click=load_sample, args=("Cleaning",), width="stretch")
+                    st.button(
+                        "Explore the sample",
+                        type="primary",
+                        key="hero_sample",
+                        on_click=load_sample,
+                        args=("Cleaning",),
+                        width="stretch",
+                    )
                 with b:
-                    st.markdown('<a class="hero-import-link" href="#import-dataset">Import a dataset</a>', unsafe_allow_html=True)
+                    st.markdown(
+                        '<a class="hero-import-link" href="#import-dataset">Import a dataset</a>',
+                        unsafe_allow_html=True,
+                    )
     with st.container(key="editorial_panel"):
         left, right = st.columns([1, 1.05], gap="large", vertical_alignment="center")
         with left:
