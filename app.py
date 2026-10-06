@@ -248,7 +248,7 @@ def landing():
     with st.container(key="editorial_panel"):
         left, right = st.columns([1, 1.05], gap="large", vertical_alignment="center")
         with left:
-            st.markdown('<div class="section-title" role="heading" aria-level="2">Welcome to<br>Viv\'s Operations Analyzer</div><p class="editorial-copy">A Python powered tool that helps operations teams, small businesses, and freelancers turn messy CSV, TSV, and Excel data into clean, organized records ready for Excel, CRM imports, and reporting.</p><p class="editorial-copy">Simply upload your file, choose your cleaning options, review the results, and download your cleaned file. Always review your data before using it in a live business system.</p><p class="editorial-note">You stay in control. Choose the rules and review the results. Excel exports retain original sheets and formatting definitions.</p>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title" role="heading" aria-level="2">Welcome to<br>Viv\'s Operations Analyzer</div><p class="editorial-copy">A Python powered tool that helps operations teams, small businesses, and freelancers turn messy CSV, TSV, and Excel data into clean, organized records ready for Excel, CRM imports, and reporting.</p><p class="editorial-copy">Simply upload your file, choose your cleaning options, review the results, and download your cleaned file. Always review your data before using it in a live business system.</p><p class="editorial-note">Exports retain original sheets and formatting definitions.</p>', unsafe_allow_html=True)
         with right:
             with st.container(key="source_panel"):
                 st.markdown('<div id="import-dataset"></div>', unsafe_allow_html=True)
