@@ -230,7 +230,7 @@ def landing():
                 unsafe_allow_html=True,
             )
             with st.container(key="hero_actions"):
-                a, b = st.columns(2)
+                a = st.column(1)
                 with a:
                     st.button("Explore the sample", type="primary", key="hero_sample", on_click=load_sample, args=("Cleaning",), width="stretch")
                 with b:
