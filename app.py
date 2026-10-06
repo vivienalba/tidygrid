@@ -171,6 +171,7 @@ def uploader(compact=False):
                     ["Auto-detect", "Comma", "Semicolon", "Tab", "Pipe"],
                     key="import_separator",
                 )
+        st.caption("CSV / TSV / XLSX  /  Up to 200 MB. Your original stays unchanged.")
     
     
 @st.dialog("Terms and Policies", width="large")
@@ -217,17 +218,19 @@ def landing():
         with artwork:
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
-            st.markdown('<h1 class="hero-title"><strong>Operational data</strong><br><span>Made clear</span></h1><p class="hero-copy">Bring the spreadsheet you already have. TidyGrid helps operations teams, administrators, freelancers, and small businesses review records, clean inconsistent data, understand what changed, and turn organized information into clear dashboards and reports.</p>', unsafe_allow_html=True)
+            eyebrow("YOUR OPERATIONS, IN GOOD ORDER")
+            st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1><p class="hero-copy">A little order makes room for bigger things. Clean your spreadsheets, explore the patterns, and turn everyday operations into useful reports.</p>', unsafe_allow_html=True)
             with st.container(key="hero_actions"):
                 a, b = st.columns(2)
                 with a:
                     st.button("Explore the sample", type="primary", key="hero_sample", on_click=load_sample, args=("Cleaning",), width="stretch")
                 with b:
                     st.markdown('<a class="hero-import-link" href="#import-dataset">Import a dataset</a>', unsafe_allow_html=True)
+            st.markdown('<p class="hero-footnote">CSV, TSV and Excel. Your original stays unchanged.</p>', unsafe_allow_html=True)
     with st.container(key="editorial_panel"):
         left, right = st.columns([1, 1.05], gap="large", vertical_alignment="center")
         with left:
-            st.markdown('<div class="section-title" role="heading" aria-level="2">Welcome to<br>Viv\'s Operations Cleaner</div><p class="editorial-copy">A Python powered website auditing tool that checks links, page structure, metadata, accessibility signals, and technical issues. Findings include supporting evidence and practical fixes, with filters, saved reports, and progress tracking for easier review.</p><p class="editorial-copy">Built for operations teams, administrators, freelancers and small businesses. Keep the details in focus, then take your work into a dashboard or report.</p><p class="editorial-note"</p>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title" role="heading" aria-level="2">Good work starts<br>with a clear view.</div><p class="editorial-copy">Bring the spreadsheet you already have. TidyGrid helps you review your records, choose what needs cleaning, and understand what changed.</p><p class="editorial-copy">Built for operations teams, administrators, freelancers and small businesses. Keep the details in focus, then take your work into a dashboard or report.</p><p class="editorial-note">You stay in control. Choose the rules and review the results. Excel exports retain original sheets and formatting definitions.</p>', unsafe_allow_html=True)
         with right:
             with st.container(key="source_panel"):
                 st.markdown('<div id="import-dataset"></div>', unsafe_allow_html=True)
@@ -974,7 +977,9 @@ def ask_page(ctx):
             "Your Dataset Question",
             placeholder="e.g. Which columns have missing values?",
         )
-        if st.form_submit_button("Ask TidyGrid", type="primary"):
+        with st.container(key="ask_action"):
+            submitted = st.form_submit_button("Ask TidyGrid", type="primary")
+        if submitted:
             st.session_state["_answer"] = dataset_answer(
                 question, ctx["data"], ctx["report"], ctx["kind"] == "xlsx"
             )
@@ -1004,19 +1009,20 @@ def export_page(ctx):
             st.markdown('<div class="export-file">' + html.escape(ctx["filename"]) + '</div>', unsafe_allow_html=True)
             excel = ctx["kind"] == "xlsx"
             extension = "xlsx" if excel else "csv"
-            st.download_button(
-                "Export Cleaned Excel Workbook" if excel else "Export Cleaned CSV",
-                ctx["export"],
-                Path(ctx["filename"]).stem + "_cleaned." + extension,
-                (
-                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    if excel
-                    else "text/csv"
-                ),
-                type="primary",
-                width="stretch",
-                on_click="ignore",
-            )
+            with st.container(key="export_download"):
+                st.download_button(
+                    "Export Cleaned Excel Workbook" if excel else "Export Cleaned CSV",
+                    ctx["export"],
+                    Path(ctx["filename"]).stem + "_cleaned." + extension,
+                    (
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        if excel
+                        else "text/csv"
+                    ),
+                    type="primary",
+                    width="stretch",
+                    on_click="ignore",
+                )
             st.caption(
                 "Every original sheet is included. Text values in your selected ranges are cleaned."
                 if excel

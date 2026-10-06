@@ -19,10 +19,11 @@ def show_chart(chart):
             titleColor="#000000",
         )
         .configure_legend(
-            labelFont="Metropolis, Arial, sans-serif", titleFont="Metropolis, Arial, sans-serif", labelFontSize=11, orient="bottom"
+            labelFont="Metropolis, Arial, sans-serif", titleFont="Metropolis, Arial, sans-serif", labelFontSize=11, labelColor="#000000", titleColor="#000000", orient="bottom"
         )
-        .properties(height=285),
+        .properties(height=285, background="#ffffff"),
         width="stretch",
+        theme=None,
     )
 
 

@@ -29,6 +29,10 @@ Weekly, monthly, quarterly and annual activity reports retain mapping, issue rev
 
 Ask TidyGrid uses local dataset commands. Open-ended generative AI is not connected and no data is sent to an AI provider.
 
+## Contrast and controls
+
+Light and dark preference variants share the same readable workspace palette. Charts explicitly use white backgrounds. Ask TidyGrid uses blue with white text, and cleaned-data exports have padded buttons with surrounding space.
+
 ## Interface limits
 
 All eight original SVG references are retained under `assets/references`. Detailed illustrations use lossless WebP exports rather than repeatedly decoding the SVGs’ embedded raster/filter stacks. Supplied caretaker and walking illustrations retain their original pixel dimensions and transparency. Simple graphics remain vector assets.

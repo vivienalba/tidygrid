@@ -42,3 +42,20 @@ h1{font-size:32px!important;font-weight:700!important}h2{font-size:26px!importan
 .st-key-import_upload [data-testid=stFileUploaderDropzone] button [data-testid=stMarkdownContainer] {color:#fff!important}
 
 [data-testid=stTable], [data-testid=stTable] *{border-radius:0!important;box-shadow:none!important}
+
+/* Keep controls legible even when the browser or Streamlit prefers dark mode. */
+[data-testid=stTextInput] input,[data-testid=stNumberInput] input,[data-testid=stTextArea] textarea,
+[data-testid=stSelectbox] input,[data-testid=stSelectbox] [role=combobox],
+[data-testid=stMultiSelect] input {color:#000!important;-webkit-text-fill-color:#000!important;background:#fff!important}
+input::placeholder,textarea::placeholder{color:#494741!important;-webkit-text-fill-color:#494741!important;opacity:1!important}
+[data-testid=stWidgetLabel] p,[data-testid=stRadio] label p,[data-testid=stCheckbox] label p{color:#000!important}
+[data-testid=stSelectbox] [role=group],[data-testid=stMultiSelect] [role=group]{background:#fff!important;color:#000!important}
+[role=listbox],[role=option]{background:#fff!important;color:#000!important}
+[role=option] *{color:#000!important}
+[role=option][aria-selected=true]{background:#d4c2ef!important}
+.st-key-ask_action [data-testid=stFormSubmitButton] button{background:#205182!important;border:1px solid #205182!important;color:#fff!important;padding:14px 26px!important;min-height:48px}
+.st-key-ask_action [data-testid=stFormSubmitButton] button p{color:#fff!important}
+.st-key-ask_action [data-testid=stFormSubmitButton] button:hover{background:#72559f!important;border-color:#72559f!important}
+.st-key-export_download{padding:12px 0 16px!important;margin:0!important}
+.st-key-export_download [data-testid=stDownloadButton] button{padding:16px 28px!important;min-height:54px;white-space:normal}
+.st-key-export_download [data-testid=stDownloadButton] button p{color:#fff!important;line-height:1.5!important;margin:0!important}
