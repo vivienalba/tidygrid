@@ -245,9 +245,9 @@ def landing():
     with st.container(key="capabilities"):
         st.markdown('<div id="the-workspace" class="section-title" role="heading" aria-level="2">One workspace. A clearer way to work.</div>', unsafe_allow_html=True)
         items = [
-            ("Clean with care.", "work-laptop.svg", "Try cleaning", "Cleaning"),
-            ("See the pattern.", "work-flag.svg", "Explore a dashboard", "Expenses + Bills"),
-            ("Share the story.", "work-mountain.svg", "Build a report", "Operations"),
+            ("Clean with care.", "Choose your rules. Excel text edits retain the original workbook layout and formatting definitions.", "work-laptop.svg", "Try cleaning", "Cleaning"),
+            ("See the pattern.", "Compare expenses, bills and monthly snapshots. Build a chart from the columns that matter.", "work-flag.svg", "Explore a dashboard", "Expenses + Bills"),
+            ("Share the story.", "Weekly, monthly, quarterly or annual reports. Download a PDF, Excel report, or interactive dashboard.", "work-mountain.svg", "Build a report", "Operations"),
         ]
         for i, (col, item) in enumerate(zip(st.columns(3, gap="large"), items)):
             title, copy, art, action, kind = item
