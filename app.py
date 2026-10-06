@@ -225,7 +225,7 @@ def landing():
         with artwork:
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
-            st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1>
+            st.markdown(<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1>
                 a, b = st.columns(2)
                 with a:
                     st.button("Explore the sample", type="primary", key="hero_sample", on_click=load_sample, args=("Cleaning",), width="stretch")
