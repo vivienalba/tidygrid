@@ -225,7 +225,7 @@ def landing():
         with artwork:
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
-            st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1><p class="hero-copy">A little order makes room for bigger things. Clean your spreadsheets, explore the patterns, and turn everyday operations into useful reports.</p>', unsafe_allow_html=True)
+            st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1> unsafe_allow_html=True)
             with st.container(key="hero_actions"):
                 a, b = st.columns(2)
                 with a:
