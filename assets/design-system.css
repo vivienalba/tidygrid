@@ -61,3 +61,44 @@ input::placeholder,textarea::placeholder{color:#494741!important;-webkit-text-fi
 .st-key-export_download{padding:12px 0 16px!important;margin:0!important}
 .st-key-export_download [data-testid=stDownloadButton] button{padding:16px 28px!important;min-height:54px;white-space:normal}
 .st-key-export_download [data-testid=stDownloadButton] button p{color:#fff!important;line-height:1.5!important;margin:0!important}
+
+/* Compact landing actions and a centered upload control in both import views. */
+.st-key-hero_actions{max-width:360px}
+.st-key-source_panel{border:1px dashed #cdcdcd!important;padding:20px!important}
+.st-key-source_panel h2{font-size:24px!important}
+.st-key-source_panel>[data-testid=stVerticalBlock]{gap:14px!important}
+.st-key-hero_actions button,.hero-import-link,
+.st-key-capabilities [data-testid=stButton] button{
+  min-height:40px!important;padding:8px 16px!important;
+  background:#d4c2ef!important;border:1px solid #72559f!important;color:#000!important;
+  display:flex;align-items:center;justify-content:center;box-sizing:border-box;
+}
+.st-key-hero_actions button p,.st-key-capabilities [data-testid=stButton] button p{
+  color:#000!important;font-size:12px!important;line-height:1.4!important;margin:0!important;
+}
+.hero-import-link{font-size:12px;line-height:1.4}
+.st-key-capabilities [data-testid=stButton]{max-width:220px;margin:0 auto;width:100%}
+.st-key-hero_actions button:hover,.hero-import-link:hover,
+.st-key-capabilities [data-testid=stButton] button:hover{
+  background:#fff3db!important;color:#000!important;
+}
+.st-key-import_upload [data-testid=stFileUploaderDropzone]{
+  align-items:center!important;justify-content:center!important;gap:16px;
+  min-height:128px!important;padding:20px 16px!important;border:1px dashed #cdcdcd!important;
+}
+.st-key-import_upload [data-testid=stFileUploaderDropzone] button{
+  width:112px!important;min-width:0!important;max-width:100%;min-height:40px!important;
+  padding:8px 16px!important;margin:0 auto!important;flex:0 0 auto;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:#d4c2ef!important;border:1px solid #72559f!important;color:#000!important;
+}
+.st-key-import_upload [data-testid=stFileUploaderDropzone] button:hover{background:#fff3db!important}
+.st-key-import_upload [data-testid=stFileUploaderDropzone] button p,
+.st-key-import_upload [data-testid=stFileUploaderDropzone] button [data-testid=stMarkdownContainer]{
+  color:#000!important;text-align:center!important;font-size:12px!important;line-height:1.4!important;margin:0!important;
+}
+@media(max-width:700px){
+  .st-key-hero_actions{max-width:360px;width:100%}
+  .st-key-hero_actions button,.hero-import-link{padding:8px 10px!important}
+  .hero-import-link,.st-key-hero_actions button p{font-size:11px!important}
+}

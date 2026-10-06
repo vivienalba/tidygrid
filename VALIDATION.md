@@ -1,12 +1,14 @@
 # Validation
 
+Compact-control revision: landing actions use #d4c2ef with #fff3db hover backgrounds and black text. Hero actions are approximately 174 × 40 px, capability actions 220 × 40 px, and Upload 112 × 40 px. The import panel and dropzone have dashed #cdcdcd borders, smaller padding, and a 128 px minimum dropzone height. Chromium verified default/hover colors, centered upload controls on landing and Data views, and 390 px layout without document overflow. All 29 regression tests passed.
+
 Screenshot cleanup revision: removed the specified sidebar/page labels, toolkit label, hero eyebrow and file-support captions. Back to Home keeps its action and keyboard focus but has no enclosing border. Capability headings are centered without top/bottom gray rules. All 29 regression tests pass after this revision. The local browser runtime failed to launch for this pass, so no new browser verification is claimed for these removals.
 
 29 regression tests pass on Python 3.12 and Streamlit 1.65.0. Coverage includes CSV/TSV import and encodings, cleaning calculations and rules, search/missing filters, Excel preservation and downloads, all six views, four report periods, finance calculations/exports, home navigation and malformed inputs.
 
 Real Chromium browser checks passed for native CSV upload, cleaning toggles, navigation, local Ask commands, report PDF/XLSX downloads, ledger CSV/JSON downloads and the interactive HTML download. Browser checks observed no JavaScript errors. The offline dashboard made no external HTTP requests; changing month changed record counts from 46 to 69, and the Unpaid filter returned the expected three bills.
 
-Visual checks at 1440px and 390px confirmed no document overflow, a centered import heading and upload button, and the permanent 128px sidebar at mobile width. Reports also fit at 320px. Both actual font families loaded successfully. Inactive sidebar labels and the upload label are white; the active sidebar label is black on yellow. Table headers are centered on yellow, label cells are centered on lavender, and grid lines are solid. These properties were checked from the rendered browser styles.
+Visual checks at 1440px and 390px confirmed no document overflow, a centered import heading and upload button, and the permanent 128px sidebar at mobile width. Reports also fit at 320px. Both actual font families loaded successfully. Inactive sidebar labels are white; the active sidebar label is black on yellow. The compact upload label is black on lavender. Table headers are centered on yellow, label cells are centered on lavender, and grid lines are solid. These properties were checked from the rendered browser styles.
 
 Repeated Bar/Donut selections retained the summary DOM instead of rebuilding it. Ordinary reruns do not replay entrances. Reduced-motion preferences suppress component reveals and restore automatic scroll behavior. Detailed artwork uses lossless WebP at original or high-resolution dimensions; the original eight SVG references remain included.
 
