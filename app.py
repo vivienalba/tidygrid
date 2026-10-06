@@ -226,7 +226,7 @@ def landing():
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
             st.markdown(
-                '<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1>',
+                '<h1 class="hero-title"><strong>Operational data.</strong><br><span>Made clear.</span></h1>',
                 unsafe_allow_html=True,
             )
             with st.container(key="hero_actions"):
@@ -248,7 +248,7 @@ def landing():
     with st.container(key="editorial_panel"):
         left, right = st.columns([1, 1.05], gap="large", vertical_alignment="center")
         with left:
-            st.markdown('<div class="section-title" role="heading" aria-level="2">Good work starts<br>with a clear view.</div><p class="editorial-copy">Bring the spreadsheet you already have. TidyGrid helps you review your records, choose what needs cleaning, and understand what changed.</p><p class="editorial-copy">Built for operations teams, administrators, freelancers and small businesses. Keep the details in focus, then take your work into a dashboard or report.</p><p class="editorial-note">You stay in control. Choose the rules and review the results. Excel exports retain original sheets and formatting definitions.</p>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title" role="heading" aria-level="2">Welcome to<br>Viv\'s Operations Analyzer</div><p class="editorial-copy">A Python powered tool that helps operations teams, small businesses, and freelancers turn messy CSV, TSV, and Excel data into clean, organized records ready for Excel, CRM imports, and reporting.</p><p class="editorial-copy">Simply upload your file, choose your cleaning options, review the results, and download your cleaned file. Always review your data before using it in a live business system.</p><p class="editorial-note">You stay in control. Choose the rules and review the results. Excel exports retain original sheets and formatting definitions.</p>', unsafe_allow_html=True)
         with right:
             with st.container(key="source_panel"):
                 st.markdown('<div id="import-dataset"></div>', unsafe_allow_html=True)
