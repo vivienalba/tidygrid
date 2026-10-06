@@ -1,5 +1,9 @@
 # Validation
 
+Landing-label revision: Explore the sample and Import a dataset use bold 15 px labels (13 px on narrow screens) and borderless lavender buttons, with cream hover backgrounds. Existing keyboard focus outlines remain. This CSS-only revision preserves the previously tested import, cleaning, and navigation functionality.
+
+Import alignment revision: removed the hidden upload-icon wrapper and its gap. Browser text-range measurements show the visible Upload label centered horizontally with less than 1 px vertical deviation at desktop and mobile widths. Workspace import content is centered in an 820 px maximum-width area; Import Settings and Try a Sample Dataset share equal desktop columns with a 16 px layout gap and stack on narrow screens. Capability buttons are 180 × 36 px. Hero action labels are bold. All 29 regression tests pass after restructuring the import controls.
+
 Compact-control revision: landing actions use #d4c2ef with #fff3db hover backgrounds and black text. Hero actions are approximately 174 × 40 px, capability actions 220 × 40 px, and Upload 112 × 40 px. The import panel and dropzone have dashed #cdcdcd borders, smaller padding, and a 128 px minimum dropzone height. Chromium verified default/hover colors, centered upload controls on landing and Data views, and 390 px layout without document overflow. All 29 regression tests passed.
 
 Screenshot cleanup revision: removed the specified sidebar/page labels, toolkit label, hero eyebrow and file-support captions. Back to Home keeps its action and keyboard focus but has no enclosing border. Capability headings are centered without top/bottom gray rules. All 29 regression tests pass after this revision. The local browser runtime failed to launch for this pass, so no new browser verification is claimed for these removals.

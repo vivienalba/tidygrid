@@ -158,18 +158,27 @@ def uploader(compact=False):
             on_change=capture_upload,
             label_visibility="collapsed",
         )
-        if uploaded is None or not uploaded.name.lower().endswith(".xlsx"):
-            with st.expander("Import Settings"):
-                st.selectbox(
-                    "File Encoding",
-                    ["UTF-8", "Windows-1252", "UTF-16"],
-                    key="import_encoding",
-                )
-                st.selectbox(
-                    "Column Separator",
-                    ["Auto-detect", "Comma", "Semicolon", "Tab", "Pipe"],
-                    key="import_separator",
-                )
+        show_settings = uploaded is None or not uploaded.name.lower().endswith(".xlsx")
+        with st.container(key="import_options"):
+            columns = st.columns(2, gap="small") if compact and show_settings else [st.container()]
+            if show_settings:
+                with columns[0]:
+                    with st.expander("Import Settings"):
+                        st.selectbox(
+                            "File Encoding",
+                            ["UTF-8", "Windows-1252", "UTF-16"],
+                            key="import_encoding",
+                        )
+                        st.selectbox(
+                            "Column Separator",
+                            ["Auto-detect", "Comma", "Semicolon", "Tab", "Pipe"],
+                            key="import_separator",
+                        )
+            if compact:
+                with columns[-1]:
+                    with st.expander("Try a Sample Dataset"):
+                        for kind in ("Cleaning", "Operations", "Expenses + Bills"):
+                            st.button(kind, key="source_sample_" + kind, on_click=load_sample, args=(kind,), width="stretch")
     
     
 @st.dialog("Terms and Policies", width="large")
@@ -412,9 +421,6 @@ def context(page):
     with st.expander("Source & Import Settings"):
         st.caption(filename)
         uploader(True)
-        with st.expander("Try a Sample Dataset"):
-            for kind in ("Cleaning", "Operations", "Expenses + Bills"):
-                st.button(kind, key="source_sample_" + kind, on_click=load_sample, args=(kind,), width="stretch")
     if filename.lower().endswith(".xlsx"):
         return workbook_context(raw, filename, digest, page)
     encoding = {"UTF-8": "utf-8-sig", "Windows-1252": "cp1252", "UTF-16": "utf-16"}.get(
