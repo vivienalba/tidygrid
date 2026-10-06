@@ -1,5 +1,7 @@
 # Validation
 
+Screenshot cleanup revision: removed the specified sidebar/page labels, toolkit label, hero eyebrow and file-support captions. Back to Home keeps its action and keyboard focus but has no enclosing border. Capability headings are centered without top/bottom gray rules. All 29 regression tests pass after this revision. The local browser runtime failed to launch for this pass, so no new browser verification is claimed for these removals.
+
 29 regression tests pass on Python 3.12 and Streamlit 1.65.0. Coverage includes CSV/TSV import and encodings, cleaning calculations and rules, search/missing filters, Excel preservation and downloads, all six views, four report periods, finance calculations/exports, home navigation and malformed inputs.
 
 Real Chromium browser checks passed for native CSV upload, cleaning toggles, navigation, local Ask commands, report PDF/XLSX downloads, ledger CSV/JSON downloads and the interactive HTML download. Browser checks observed no JavaScript errors. The offline dashboard made no external HTTP requests; changing month changed record counts from 46 to 69, and the Unpaid filter returned the expected three bills.

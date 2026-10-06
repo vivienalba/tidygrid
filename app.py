@@ -135,7 +135,6 @@ def sidebar():
     with st.sidebar:
         st.markdown(logo(True), unsafe_allow_html=True)
         st.button("Back to Home", key="back_home", on_click=go_home, width="stretch")
-        eyebrow("YOUR DATA WORKSPACE")
         for page, icon in zip(PAGES, ICONS):
             st.button(
                 page,
@@ -171,7 +170,6 @@ def uploader(compact=False):
                     ["Auto-detect", "Comma", "Semicolon", "Tab", "Pipe"],
                     key="import_separator",
                 )
-        st.caption("CSV / TSV / XLSX  /  Up to 200 MB. Your original stays unchanged.")
     
     
 @st.dialog("Terms and Policies", width="large")
@@ -218,7 +216,6 @@ def landing():
         with artwork:
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
-            eyebrow("YOUR OPERATIONS, IN GOOD ORDER")
             st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1><p class="hero-copy">A little order makes room for bigger things. Clean your spreadsheets, explore the patterns, and turn everyday operations into useful reports.</p>', unsafe_allow_html=True)
             with st.container(key="hero_actions"):
                 a, b = st.columns(2)
@@ -226,7 +223,6 @@ def landing():
                     st.button("Explore the sample", type="primary", key="hero_sample", on_click=load_sample, args=("Cleaning",), width="stretch")
                 with b:
                     st.markdown('<a class="hero-import-link" href="#import-dataset">Import a dataset</a>', unsafe_allow_html=True)
-            st.markdown('<p class="hero-footnote">CSV, TSV and Excel. Your original stays unchanged.</p>', unsafe_allow_html=True)
     with st.container(key="editorial_panel"):
         left, right = st.columns([1, 1.05], gap="large", vertical_alignment="center")
         with left:
@@ -500,7 +496,7 @@ def preview(data, key, query="", missing=False):
 def data_page(ctx):
     if ctx["kind"] == "csv":
         page_intro(
-            "THE WORKSPACE",
+            "",
             "Review Your Dataset",
             "A clear view of your records, before and after cleaning.",
         )
@@ -572,14 +568,13 @@ def data_page(ctx):
 
 def clean_page(ctx):
     page_intro(
-        "CLEAN",
+        "",
         "A Little Order. A Big Difference.",
         "Choose what changes. Review actual examples before you export.",
     )
     left, right = st.columns([1, 2.2], gap="large")
     with left:
         with st.container(key="clean_controls"):
-            eyebrow("YOUR TOOLKIT")
             if ctx["kind"] == "csv":
                 for key, label, help_text in RULES:
                     st.checkbox(
@@ -754,7 +749,7 @@ def expenses(ctx):
 
 def dashboard_page(ctx):
     page_intro(
-        "DASHBOARD",
+        "",
         "A clear view of your operations",
         "Choose a view, refine your records, and review the figures before exporting.",
     )
@@ -779,7 +774,7 @@ def dashboard_page(ctx):
 
 def reports_page(ctx):
     page_intro(
-        "REPORTS",
+        "",
         "Bring the Work into Focus.",
         "Weekly, monthly, quarterly, and annual reports built from your activity records.",
     )

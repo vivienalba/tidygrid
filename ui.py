@@ -77,8 +77,9 @@ def eyebrow(text):
 
 
 def page_intro(kicker, title, description=""):
+    label = f'<div class="eyebrow">{html.escape(kicker)}</div>' if kicker else ""
     st.markdown(
-        f'<div class="page-intro"><div class="eyebrow">{html.escape(kicker)}</div><h1>{html.escape(title)}</h1><p>{html.escape(description)}</p></div>',
+        f'<div class="page-intro">{label}<h1>{html.escape(title)}</h1><p>{html.escape(description)}</p></div>',
         unsafe_allow_html=True,
     )
 
