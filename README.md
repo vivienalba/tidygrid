@@ -23,7 +23,7 @@ CSV/TSV import retains encoding and delimiter settings. Cleaning includes header
 
 Excel sheet/range selection edits only eligible plain text. Formulas, numeric values, protected content, rich text, hyperlinks and merged cells stay intact. Every original sheet, including hidden sheets, is exported with formatting definitions retained. Edited values can affect conditional formatting, charts and wrapping. Use ordinary unencrypted `.xlsx` files; `.xls` and `.xlsm` are unsupported.
 
-Dashboards include grouping/count/sum/average, filters, chart summary CSV, expense breakdowns, monthly bills, snapshots and cash flow. Save workspace JSON before closing: session state is temporary. Ledger CSV and a self-contained interactive HTML dashboard are downloadable. Currency is a label, not exchange-rate conversion. Net-worth snapshots are user-entered.
+The Dashboard Overview follows the supplied layout: three dataset summaries, review actions, column completeness and searchable records. Chart Builder, Expense Dashboard and Bills & Cash Flow retain grouping/count/sum/average, filters, chart summary CSV, expense breakdowns, monthly bills, snapshots and cash flow. Save workspace JSON before closing: session state is temporary. Ledger CSV and a self-contained interactive HTML dashboard are downloadable. Currency is a label, not exchange-rate conversion. Net-worth snapshots are user-entered.
 
 Weekly, monthly, quarterly and annual activity reports retain mapping, issue review, Excel and PDF exports. Cutoffs use Asia/Manila. Historical completion timing requires a recorded completion date; current status alone cannot reconstruct it.
 
@@ -39,7 +39,7 @@ All eight original SVG references are retained under `assets/references`. Detail
 
 Result summaries follow the lavender “year in numbers” reference. Tabulated results use yellow headers, a lavender label column, centered text, sharp edges and solid black grid lines. A “Sort and explore this table” disclosure retains the interactive data grid for results. Dataset previews keep the native searchable grid; Streamlit controls its canvas header alignment.
 
-Bundled Anime.js v4.5.0 owns metric reveals; GSAP v3.15.0 owns illustration fades. Both run within the supported Streamlit v2 component lifecycle, with scoped cleanup and reduced-motion support. Entrances run once per component per session and only when visible. Unchanged components are not rebuilt on ordinary reruns. Tables and chart controls remain stable. Native controls have short color feedback. Streamlit server reruns still govern page navigation; continuous whole-page morphs are not available. The permanent sidebar remains available at small widths and tables scroll horizontally.
+Bundled GSAP v3.15.0 handles the mobile drawer, illustration/card entrances, completeness bars, comparison rows and subtle illustration hover feedback. Anime.js v4.5.0 handles changed summary-value opacity. Both run within the supported Streamlit v2 component lifecycle, with scoped cleanup and reduced-motion support. Entrances run once per component per session and only when visible. Unchanged components are not rebuilt on ordinary reruns. Tables and chart controls remain stable. Native controls have short color feedback. Streamlit server reruns still govern page navigation; continuous whole-page morphs are not available. At 700 px and below, an accessible hamburger menu replaces the sidebar. Tables scroll horizontally. Mobile features use consistent side padding and compact, borderless action buttons.
 
 ## Verify
 

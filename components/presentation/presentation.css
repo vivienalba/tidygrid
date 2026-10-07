@@ -1,3 +1,32 @@
 :host{display:block;width:100%;font-family:Metropolis,Arial,sans-serif;color:#000}*{box-sizing:border-box}.presentation{width:100%}.art{display:flex;align-items:center;justify-content:center;overflow:hidden}.art img{display:block;width:100%;height:100%;object-fit:contain;max-width:650px}.summary{background:#d4c2ef;padding:28px 32px 30px}.summary-title{font:700 27px/1.2 'HK Grotesk',Arial,sans-serif;margin:0 0 24px;color:#000}.stats-grid{display:grid;grid-template-columns:repeat(var(--columns,3),minmax(0,1fr));gap:clamp(18px,3vw,42px)}.metric{text-align:center;min-width:0;border-top:1px solid #494741;border-bottom:1px solid #494741;padding:18px 8px}.metric-label{font-size:11px;font-weight:700;letter-spacing:.08em;line-height:1.5;text-transform:uppercase;color:#000}.metric-value{font:700 clamp(34px,4vw,58px)/1.15 'HK Grotesk',Arial,sans-serif;margin:16px 0 12px;letter-spacing:-.025em;color:#000;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.metric-detail{font-size:11px;line-height:1.6;color:#000}.comparison{background:#fff;border:1px solid #000;overflow:hidden}.comparison-top{padding:24px;background:#f5f7ee;border-bottom:1px solid #000}.comparison-top h2{font:700 25px/1.2 'HK Grotesk',Arial,sans-serif;margin:0 0 8px;color:#000}.comparison-top p{margin:0;font-size:12px;line-height:1.6;color:#000}.comparison-head,.compare-row{display:grid;grid-template-columns:1fr 1.2fr 1.2fr;text-align:center}.comparison-head{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:#f6d46b}.comparison-head span,.compare-row>div{padding:18px 16px;border-right:1px solid #000;border-bottom:1px solid #000;overflow-wrap:anywhere}.comparison-head span:last-child,.compare-row>div:last-child{border-right:0}.compare-row:last-child>div{border-bottom:0}.compare-row{font-size:13px;line-height:1.6}.before{color:#494741}.after{font-weight:600;color:#000}.field{font-size:12px;font-weight:600;background:#d4c2ef;color:#000}.empty{padding:26px;font-size:13px;line-height:1.7}.empty-title{font:600 22px 'HK Grotesk',Arial,sans-serif;margin:0 0 10px}.empty p{margin:0}
 @media(max-width:600px){.summary{padding:24px 18px}.summary-title{font-size:23px;margin-bottom:24px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}.metric{padding:18px 4px}.metric-value{font-size:34px}.metric-label,.metric-detail{font-size:10px}.comparison-top{padding:20px}.comparison-top h2{font-size:22px}.compare-row{font-size:11px}.compare-row>div,.comparison-head span{padding:14px 8px}.art{height:min(270px,var(--art-height))!important}.art img{max-height:270px}}
 @media(max-width:300px){.stats-grid{grid-template-columns:1fr}.metric-value{font-size:39px}.comparison-head,.compare-row{grid-template-columns:1fr 1fr}.comparison-head span:first-child{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.field{grid-column:1/-1;border-right:0!important}.before{border-right:1px solid #000!important}}
+.summary-cards{background:transparent;padding:0}
+.summary-cards .stats-grid{gap:16px}
+.summary-cards .metric{background:#fff;border:1px solid #cdcdcd;border-radius:8px;padding:22px 24px;text-align:left}
+.summary-cards .metric:first-child{background:#d4c2ef}
+.summary-cards .metric:last-child{background:#fff3db}
+.summary-cards .metric-value{margin:12px 0}
+.quality{display:flex;flex-direction:column;gap:28px;padding:16px 0}
+.quality-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:10px}
+.quality-label{font-size:13px;font-weight:600;overflow-wrap:anywhere;min-width:0}
+.quality-count{font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.quality-track{height:5px;background:#f4f4f4;border-radius:3px;overflow:hidden}
+.quality-fill{height:100%;background:#72559f;transform-origin:left center}
+@media(max-width:600px){.summary-cards .stats-grid{grid-template-columns:1fr}.summary-cards .metric{padding:18px}.quality{gap:20px}}
+.navigation{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#f5f7ee;min-height:48px}
+.mobile-brand .tg-logo{display:flex;align-items:center;gap:10px;font:700 25px 'HK Grotesk',Arial,sans-serif}.mobile-brand svg{width:30px;height:30px}
+.navigation button{font-family:Metropolis,Arial,sans-serif;cursor:pointer;color:#000}
+.menu-toggle{width:48px;height:48px;border:0;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:#d4c2ef}
+.menu-toggle span{display:block;width:22px;height:2px;background:#000}
+.navigation button:focus-visible{outline:3px solid #205182;outline-offset:3px}
+.mobile-dialog{position:fixed;inset:0;margin:0;padding:0;border:0;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;background:transparent;color:#000;overflow:hidden}
+.mobile-dialog::backdrop{background:#0006}
+.mobile-menu-panel{background:#f5f7ee;width:min(340px,88vw);height:100%;padding:24px;padding-top:max(24px,env(safe-area-inset-top));padding-bottom:max(24px,env(safe-area-inset-bottom));overflow-y:auto;box-shadow:8px 0 30px #0002}
+.mobile-menu-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:30px}
+.mobile-menu-title{font:700 25px 'HK Grotesk',Arial,sans-serif}
+.menu-close{min-height:44px;padding:8px 12px;border:0;background:#d4c2ef;border-radius:4px;font-size:14px}
+.mobile-menu-links{display:flex;flex-direction:column;gap:8px}
+.mobile-menu-item{width:100%;min-height:50px;padding:14px 16px;text-align:left;background:transparent;border:0;border-radius:4px;font-size:16px;line-height:1.5}
+.mobile-menu-item[aria-current=page]{background:#d4c2ef;font-weight:600}
+.mobile-menu-item:hover,.menu-close:hover,.menu-toggle:hover{background:#fff3db}

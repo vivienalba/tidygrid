@@ -1,21 +1,25 @@
-# Validation
+# Current validation
 
-Landing-label revision: Explore the sample and Import a dataset use bold 15 px labels (13 px on narrow screens) and borderless lavender buttons, with cream hover backgrounds. Existing keyboard focus outlines remain. This CSS-only revision preserves the previously tested import, cleaning, and navigation functionality.
+30 regression tests pass on Python 3.12 and Streamlit 1.65.0. Coverage includes CSV/TSV import and encodings, cleaning calculations/rules, search and missing-value filters, workbook preservation and downloads, all six main views, four report periods, finance calculations/exports, home navigation and malformed inputs. The new Overview is covered for real dataset counts, record filtering, opening Chart Builder and navigating to cleaning. Python sources compile and the presentation JavaScript passes syntax checking.
 
-Import alignment revision: removed the hidden upload-icon wrapper and its gap. Browser text-range measurements show the visible Upload label centered horizontally with less than 1 px vertical deviation at desktop and mobile widths. Workspace import content is centered in an 820 px maximum-width area; Import Settings and Try a Sample Dataset share equal desktop columns with a 16 px layout gap and stack on narrow screens. Capability buttons are 180 × 36 px. Hero action labels are bold. All 29 regression tests pass after restructuring the import controls.
+Chromium checks for this revision passed with no page JavaScript errors:
 
-Compact-control revision: landing actions use #d4c2ef with #fff3db hover backgrounds and black text. Hero actions are approximately 174 × 40 px, capability actions 220 × 40 px, and Upload 112 × 40 px. The import panel and dropzone have dashed #cdcdcd borders, smaller padding, and a 128 px minimum dropzone height. Chromium verified default/hover colors, centered upload controls on landing and Data views, and 390 px layout without document overflow. All 29 regression tests passed.
+- New landing action labels, removal of the workflow section and solid cream navigation.
+- Desktop dashboard composition: three cards; review/completeness panels aligned at top and bottom with a 16 px gap and approximately 2:1 widths; records below.
+- Overview search, Build chart action, repeated Bar/Donut changes and source import popover.
+- Mobile hamburger opening/closing, Escape dismissal, restored focus, landing anchor navigation, Dashboard callback navigation and Back to Home callback.
+- Reduced-motion menu behavior and switching to desktop while the drawer is open.
+- Illustration hover uses a scoped GSAP transform and resets when reduced motion is enabled.
+- No document overflow at 320, 390 or 700 px in the mobile workspace; desktop layout checked at 1440 px.
+- Mobile capabilities: measured 24 px side padding, 16 px description/button gaps, 40 px between features, 14 px action labels and borderless buttons at least 44 px tall.
+- Landing import heading and upload button centers match the panel center with zero measured horizontal deviation at 390 px.
 
-Screenshot cleanup revision: removed the specified sidebar/page labels, toolkit label, hero eyebrow and file-support captions. Back to Home keeps its action and keyboard focus but has no enclosing border. Capability headings are centered without top/bottom gray rules. All 29 regression tests pass after this revision. The local browser runtime failed to launch for this pass, so no new browser verification is claimed for these removals.
+# Previously verified functionality retained
 
-29 regression tests pass on Python 3.12 and Streamlit 1.65.0. Coverage includes CSV/TSV import and encodings, cleaning calculations and rules, search/missing filters, Excel preservation and downloads, all six views, four report periods, finance calculations/exports, home navigation and malformed inputs.
+Earlier browser passes verified actual CSV upload, cleaning toggles, local Ask commands, report PDF/XLSX downloads, ledger CSV/JSON downloads and the interactive HTML download. The self-contained exported dashboard made no external HTTP requests. Those data/export implementations are unchanged by this revision and remain covered by the regression suite.
 
-Real Chromium browser checks passed for native CSV upload, cleaning toggles, navigation, local Ask commands, report PDF/XLSX downloads, ledger CSV/JSON downloads and the interactive HTML download. Browser checks observed no JavaScript errors. The offline dashboard made no external HTTP requests; changing month changed record counts from 46 to 69, and the Unpaid filter returned the expected three bills.
+Actual HK Grotesk and Metropolis font files are included locally. The light and dark preference variants share readable black text and white working surfaces. Charts explicitly use a white background. The Ask form action remains blue with white text; cleaned-data exports retain surrounding space and 16 px vertical / 28 px horizontal button padding.
 
-Visual checks at 1440px and 390px confirmed no document overflow, a centered import heading and upload button, and the permanent 128px sidebar at mobile width. Reports also fit at 320px. Both actual font families loaded successfully. Inactive sidebar labels are white; the active sidebar label is black on yellow. The compact upload label is black on lavender. Table headers are centered on yellow, label cells are centered on lavender, and grid lines are solid. These properties were checked from the rendered browser styles.
+# Limits
 
-Repeated Bar/Donut selections retained the summary DOM instead of rebuilding it. Ordinary reruns do not replay entrances. Reduced-motion preferences suppress component reveals and restore automatic scroll behavior. Detailed artwork uses lossless WebP at original or high-resolution dimensions; the original eight SVG references remain included.
-
-Remaining limits: Streamlit's native canvas controls dataset-preview header alignment and server reruns govern page changes. PDF fonts remain Helvetica, and Excel fonts Arial. Ask TidyGrid is a local command interface rather than an external generative-AI integration. This ZIP requires deployment by the owner; it does not publish itself.
-
-Contrast correction: browser verification with a persisted Dark preference confirmed black input text, #494741 placeholders and white input backgrounds. Both theme variants explicitly define white data surfaces and yellow headers with black text. Charts set their own white background and do not inherit Streamlit's chart theme. Ask TidyGrid uses #205182 with white text. CSV export has 16px vertical / 28px horizontal internal padding plus a spaced wrapper; download and mobile overflow checks passed.
+Browser checks used Chromium emulating narrow viewports, not a physical iPhone. Streamlit's native canvas controls dataset-preview header alignment, and server reruns govern page changes. PDF fonts remain Helvetica and Excel fonts Arial. Ask TidyGrid is a local dataset-command interface. This complete project still needs to be uploaded/deployed by the owner; the archive does not publish itself.

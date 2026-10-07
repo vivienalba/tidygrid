@@ -1,24 +1,43 @@
 # Reference mapping
 
-HOME.svg guides the yellow illustrated hero, cream editorial sections, white capabilities, yellow workflow sequence, lavender summary surfaces and spacing.
+HOME.svg guides the illustrated hero, cream editorial sections, white capabilities, lavender summaries and overall spacing. The former yellow “From a file to a fresh perspective” section has been removed. Its original reference assets remain in the project.
 
 | Reference | Adaptation |
 |---|---|
 | HOME | Landing composition and rhythm |
 | r | Cleaning, dashboard and report graphics |
 | r1 | Everyday-work map section |
-| r2 | Four workflow illustrations |
+| r2 | Original workflow artwork, retained as source assets |
 | r3 | Landing hero |
-| r4 | Ask light bulb and report pencil; arrow target omitted |
+| r4 | Ask light bulb and report pencil |
 | r6 | Report preparation and introduction |
 | r7 | Export completion |
+| IMG_3064.JPG | Dashboard composition: sidebar, compact header, three summary cards, wide review panel, narrow completeness panel, full-width records table |
 
-Original SVGs remain intact. Simple graphic crops retain vector quality. Complex embedded-image SVGs are rendered at high resolution into lossless WebP, avoiding repeated filter compositing. The supplied transparent caretaker and walking PNGs are converted losslessly at their original dimensions.
+The dashboard reference supplies spatial relationships only. TidyGrid retains its own palette and existing heading/body typography. All counts, completeness bars and records reflect the active cleaned dataset. Review actions open real app views. Chart Builder, Expense Dashboard and Bills & Cash Flow remain available from the workspace selector.
 
-The additional table screenshots guide two distinct structures: lavender editorial result strips with ruled metric columns, and sharp comparison tables with yellow headers, lavender row labels, white data cells and black grid lines. Values come from the actual dataset and selected period; illustrative financial figures and years from the reference are not copied into results. Month-to-month Change is unavailable when the baseline is zero or either value is unknown.
+Original SVGs remain intact. Simple graphics retain vector quality. Complex embedded-image SVGs use high-resolution lossless WebP exports to avoid repeated filter compositing. The supplied caretaker and walking illustrations retain their original pixel dimensions and transparency.
 
-Cream #f5f7ee surrounds white working surfaces. Purple #72559f is the sidebar and Ask surface, lavender #d4c2ef supports summaries, and yellow #f6d46b identifies landing emphasis, table headers and active navigation. Blue #205182 indicates focus/selection. Labels and table text are black; purple surfaces use white foregrounds. Gradients remain concentrated in artwork and scenarios.
+Result summaries retain the lavender “year in numbers” structure. Tabulated results retain yellow headers, lavender row labels, white cells and black grid lines. Reference figures and years are not copied into the data. Native dataset previews remain virtualized and scroll horizontally.
 
-HK Grotesk headings and Metropolis body/table text are served locally in weights 400, 600 and 700. Both genuine font families and their licenses are included.
+# Color and type
 
-Anime.js createScope/animate owns the 150ms metric opacity reveal. GSAP matchMedia and scoped tweens own 240ms illustration fades. Engines never animate the same property on the same target. IntersectionObserver starts visible entrances; session state prevents replaying them on filters and navigation. Content fingerprints prevent unchanged component DOM from being rebuilt. Cleanup disconnects observers, removes listeners and reverts scopes/tweens. Reduced motion disables reveals. There are no ambient loops, illustration hover transforms or table entrances. No decorative arrows or middle-dot separators are added.
+Navigation and the workspace background use solid cream #f5f7ee with black text. Lavender #d4c2ef identifies active navigation, landing actions and selected summary surfaces. Yellow #f6d46b supports the hero and table headers. Purple #72559f identifies completeness bars and the Ask introduction. Blue #205182 provides focus outlines and the Ask form action. Landing buttons use #fff3db on hover. Gradients remain concentrated in artwork and scenario panels.
+
+HK Grotesk headings and Metropolis body/table text are served locally in weights 400, 600 and 700. Actual font files and their licenses are included. Font styling has not been copied from the dashboard photo.
+
+# Responsive layout
+
+At 700 px and below, a cream mobile header replaces the desktop navigation with a hamburger menu. Its modal drawer uses native dialog focus trapping, Escape dismissal, focus restoration and buttons at least 44 px tall. Workspace destinations use the Streamlit component trigger callback; landing destinations scroll to real section anchors. The desktop sidebar returns above that breakpoint.
+
+The mobile capabilities section has 24 px horizontal padding, 16 px gaps within features, 40 px between features, 40 px top padding and 44 px bottom padding. Headings and descriptions are centered, with compact borderless lavender action buttons and 14 px labels. Native Markdown's negative bottom margin is reset within this section so the description/button gap is real.
+
+The import heading, panel and upload control are centered. The hidden native heading-anchor wrapper is removed from layout because its margin otherwise offsets the heading. Import Settings and Try a Sample Dataset sit side by side in workspace import controls on wider screens and stack on narrow screens. Dashed gray borders remain on import surfaces.
+
+# Motion ownership
+
+GSAP owns illustration entrances and hover feedback, summary-card entrances, completeness-bar reveals, comparison-row entrances and the mobile drawer. Entrances use short opacity/transform transitions, a small stagger and power-out easing. The drawer opens in 240 ms and closes in 160 ms. Illustration hover feedback lasts 220 ms and is restricted to fine pointers. Content is visible before animation initializes.
+
+Anime.js owns a 140 ms opacity transition on changed summary values. It does not animate GSAP's targets. Both engines are bundled and run within the public Streamlit v2 component lifecycle. Cleanup removes observers/listeners and reverts scoped animations; reduced-motion preferences remove motion, including when changed at runtime. IntersectionObserver limits entrances to visible content, and session state avoids replaying entrances on ordinary filters and navigation.
+
+Tables and native controls do not move. There are no ambient loops, animated counters, scroll-jacking or dependencies on a CDN. Streamlit server reruns still determine page-navigation latency; whole-page morphs are not attempted.

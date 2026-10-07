@@ -69,9 +69,29 @@ def test_samples_reports_finance():
     at.button(key='back_home').click().run()
     at.button(key='feature_sample_1').click().run()
     assert not at.exception
+    assert at.session_state['dashboard_mode']=='Overview'
+    at.radio(key='dashboard_mode').set_value('Bills & Cash Flow').run()
     assert at.session_state['dashboard_mode']=='Bills & Cash Flow'
     assert len(at.get('download_button'))>=3
 
 def test_empty_corrupt():
     assert len(app_input('empty.csv',b'').error)==1
     assert len(app_input('broken.xlsx',b'not-a-workbook').error)==1
+
+def test_dashboard_overview_actions_and_records():
+    at=app_input()
+    at.button(key='nav_Dashboard').click().run()
+    assert at.session_state['dashboard_mode']=='Overview'
+    at.text_input(key='dashboard_search').set_value('Bob').run()
+    assert len(at.dataframe[0].value)==1
+    at.text_input(key='dashboard_search').set_value('').run()
+    at.selectbox(key='dashboard_filter').set_value('Rows with Missing Values').run()
+    assert len(at.dataframe[0].value)==1
+    at.button(key='dashboard_go_2').click().run()
+    assert at.session_state['dashboard_mode']=='Chart Builder'
+    at.selectbox(key='chart_aggregation').set_value('Sum').run()
+    assert not at.exception
+    at.radio(key='dashboard_mode').set_value('Overview').run()
+    at.button(key='dashboard_go_1').click().run()
+    assert at.session_state['page']=='Clean'
+    assert not at.exception

@@ -32,9 +32,11 @@ from ui import (
     eyebrow,
     install_styles,
     result_summary,
+    column_completeness,
     illustration,
     logo,
     motion,
+    mobile_navigation,
     page_intro,
     workbook_summary,
 )
@@ -62,6 +64,8 @@ def clear_views():
             "_dashboard_mode",
             "_latest_report",
             "_report_settings",
+            "dashboard_search",
+            "dashboard_filter",
         ):
             del st.session_state[key]
 
@@ -113,6 +117,25 @@ def load_sample(kind="Cleaning"):
 
 def navigate(page):
     st.session_state["page"] = page
+
+
+def mobile_navigate():
+    destination = st.session_state.get("mobile_workspace_menu", {}).get("navigate")
+    if destination == "Home":
+        go_home()
+    elif destination in PAGES:
+        navigate(destination)
+
+
+def open_chart_builder():
+    st.session_state["dashboard_mode"] = "Chart Builder"
+    st.session_state["_dashboard_mode"] = "Chart Builder"
+
+
+def explore_dashboard():
+    load_sample("Expenses + Bills")
+    st.session_state["dashboard_mode"] = "Overview"
+    st.session_state["_dashboard_mode"] = "Overview"
 
 
 def select(label, choices, key):
@@ -219,62 +242,42 @@ def landing():
         with brand:
             st.markdown(logo(), unsafe_allow_html=True)
         with links:
-            st.markdown('<nav class="landing-nav"><a href="#the-workspace">The workspace</a><a href="#how-it-works">How it works</a><a href="#import-dataset">Import data</a></nav>', unsafe_allow_html=True)
+            st.markdown('<nav class="landing-nav"><a href="#the-workspace">The workspace</a><a href="#import-dataset">Import data</a></nav>', unsafe_allow_html=True)
     with st.container(key="hero"):
         artwork, copy = st.columns(2, gap="large", vertical_alignment="center")
         with artwork:
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
-            st.markdown(
-                '<h1 class="hero-title"><strong>Operational data.</strong><br><span>Made clear.</span></h1>',
-                unsafe_allow_html=True,
-            )
+            st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1><p class="hero-copy">A little order makes room for bigger things. Clean your spreadsheets, explore the patterns, and turn everyday operations into useful reports.</p>', unsafe_allow_html=True)
             with st.container(key="hero_actions"):
                 a, b = st.columns(2)
                 with a:
-                    st.button(
-                        "Explore the sample",
-                        type="primary",
-                        key="hero_sample",
-                        on_click=load_sample,
-                        args=("Cleaning",),
-                        width="stretch",
-                    )
+                    st.button("Explore the sample", type="primary", key="hero_sample", on_click=load_sample, args=("Cleaning",), width="stretch")
                 with b:
-                    st.markdown(
-                        '<a class="hero-import-link" href="#import-dataset">Import a dataset</a>',
-                        unsafe_allow_html=True,
-                    )
+                    st.markdown('<a class="hero-import-link" href="#import-dataset">Import a dataset</a>', unsafe_allow_html=True)
     with st.container(key="editorial_panel"):
         left, right = st.columns([1, 1.05], gap="large", vertical_alignment="center")
         with left:
-            st.markdown('<div class="section-title" role="heading" aria-level="2">Welcome to<br>Viv\'s Operations Analyzer</div><p class="editorial-copy">A Python powered tool that helps operations teams, small businesses, and freelancers turn messy CSV, TSV, and Excel data into clean, organized records ready for Excel, CRM imports, and reporting.</p><p class="editorial-copy">Simply upload your file, choose your cleaning options, review the results, and download your cleaned file. Always review your data before using it in a live business system.</p><p class="editorial-note">Exports retain original sheets and formatting definitions.</p>', unsafe_allow_html=True)
+            st.markdown('<div class="section-title" role="heading" aria-level="2">Good work starts<br>with a clear view.</div><p class="editorial-copy">Bring the spreadsheet you already have. TidyGrid helps you review your records, choose what needs cleaning, and understand what changed.</p><p class="editorial-copy">Built for operations teams, administrators, freelancers and small businesses. Keep the details in focus, then take your work into a dashboard or report.</p><p class="editorial-note">You stay in control. Choose the rules and review the results. Excel exports retain original sheets and formatting definitions.</p>', unsafe_allow_html=True)
         with right:
             with st.container(key="source_panel"):
-                st.markdown('<div id="import-dataset"></div>', unsafe_allow_html=True)
                 st.markdown("## Import Dataset")
                 st.caption("Start with a CSV, TSV, or Excel workbook.")
                 uploader()
     with st.container(key="capabilities"):
         st.markdown('<div id="the-workspace" class="section-title" role="heading" aria-level="2">One workspace. A clearer way to work.</div>', unsafe_allow_html=True)
         items = [
-            ("Clean with care.", "Choose your rules. Excel text edits retain the original workbook layout and formatting definitions.", "work-laptop.svg", "Try cleaning", "Cleaning"),
-            ("See the pattern.", "Compare expenses, bills and monthly snapshots. Build a chart from the columns that matter.", "work-flag.svg", "Explore a dashboard", "Expenses + Bills"),
+            ("Clean with care.", "Choose your rules. Excel text edits retain the original workbook layout and formatting definitions.", "work-laptop.svg", "Try data refinement", "Cleaning"),
+            ("See the pattern.", "Compare expenses, bills and monthly snapshots. Build a chart from the columns that matter.", "work-flag.svg", "Explore the dashboard", "Expenses + Bills"),
             ("Share the story.", "Weekly, monthly, quarterly or annual reports. Download a PDF, Excel report, or interactive dashboard.", "work-mountain.svg", "Build a report", "Operations"),
         ]
         for i, (col, item) in enumerate(zip(st.columns(3, gap="large"), items)):
             title, copy, art, action, kind = item
             with col:
-                illustration(art, title, f"feature_art_{i}", 120)
-                st.markdown(f'<div class="feature-title" role="heading" aria-level="3">{title}</div><p class="feature-copy">{copy}</p>', unsafe_allow_html=True)
-                st.button(action, key=f"feature_sample_{i}", on_click=load_sample, args=(kind,), width="stretch")
-    with st.container(key="workflow"):
-        st.markdown('<div id="how-it-works" class="section-title" role="heading" aria-level="2">From a file to a fresh perspective.</div>', unsafe_allow_html=True)
-        items = [("Bring your data", "Upload a CSV, TSV or Excel workbook."), ("Choose what changes", "Set cleaning rules and review your Excel ranges."), ("Look a little closer", "Compare values, filter records and build a view."), ("Take it with you", "Download cleaned data, dashboards and reports.")]
-        for i, (col, (title, copy)) in enumerate(zip(st.columns(4, gap="large"), items)):
-            with col:
-                illustration(f"art/workflow-{i}.webp", title, f"workflow_art_{i}", 140)
-                st.markdown(f'<div class="workflow-title" role="heading" aria-level="3">{title}</div><p class="workflow-copy">{copy}</p>', unsafe_allow_html=True)
+                with st.container(key=f"feature_card_{i}"):
+                    illustration(art, title, f"feature_art_{i}", 120)
+                    st.markdown(f'<div class="feature-title" role="heading" aria-level="3">{title}</div><p class="feature-copy">{copy}</p>', unsafe_allow_html=True)
+                    st.button(action, key=f"feature_sample_{i}", on_click=explore_dashboard if kind == "Expenses + Bills" else load_sample, args=() if kind == "Expenses + Bills" else (kind,), width="stretch")
     with st.container(key="work_anywhere"):
         left, right = st.columns([1, 1.2], gap="large", vertical_alignment="center")
         with left:
@@ -428,10 +431,10 @@ def workbook_context(raw, filename, digest, page):
     }
 
 
-def context(page):
+def context(page, source_panel=None):
     filename, raw, sample = st.session_state["_input"]
     digest = hashlib.sha256(raw).hexdigest()
-    with st.expander("Source & Import Settings"):
+    with source_panel if source_panel is not None else st.expander("Source & Import Settings"):
         st.caption(filename)
         uploader(True)
     if filename.lower().endswith(".xlsx"):
@@ -766,24 +769,82 @@ def expenses(ctx):
     )
 
 
+def dashboard_header():
+    with st.container(key="dashboard_header"):
+        title, source, ask = st.columns([2.6, 1.6, 1.1], vertical_alignment="center", gap="small")
+        with title:
+            st.markdown("# Dashboard")
+        with source:
+            source_panel = st.popover("Source & Import Settings", width="stretch")
+        with ask:
+            st.button("Ask TidyGrid", key="dashboard_ask", on_click=navigate, args=("Ask TidyGrid",), width="stretch")
+    return source_panel
+
+
+def dashboard_overview(ctx):
+    data = ctx["data"]
+    blank = data.astype("string").replace(r"^\s*$", pd.NA, regex=True).isna()
+    missing = int(blank.sum().sum())
+    result_summary("Dataset overview", [
+        (f"{len(data):,}", "Records", "In your cleaned dataset"),
+        (f"{len(data.columns):,}", "Columns", "Available to explore"),
+        (f"{missing:,}", "Missing cells", f"Across {int(blank.any(axis=1).sum()):,} records"),
+    ], "dashboard_overview_metrics", variant="cards")
+    with st.container(key="dashboard_middle"):
+        review, quality = st.columns([2, 1], gap="medium")
+        with review:
+            with st.container(key="dashboard_review"):
+                st.markdown("### Your data, ready for review")
+                st.caption("Choose your next step")
+                actions = [
+                    ("Review your records", f"{len(data):,} records, with originals and changes available.", "Review", "Data"),
+                    ("Refine your dataset", "Choose cleaning rules and inspect the values that change.", "Refine", "Clean"),
+                    ("Explore the patterns", "Group, filter and chart the columns that matter.", "Build chart", None),
+                    ("Prepare an operations report", "Review weekly, monthly, quarterly or annual activity.", "Create report", "Reports"),
+                    ("Take the results with you", "Download the complete cleaned file.", "Export", "Export"),
+                ]
+                for i, (title, description, label, page) in enumerate(actions):
+                    with st.container(key=f"dashboard_action_{i}"):
+                        text, action = st.columns([3.2, 1.1], vertical_alignment="center", gap="small")
+                        with text:
+                            st.markdown(f'<div class="review-title">{html.escape(title)}</div><p class="review-description">{html.escape(description)}</p>', unsafe_allow_html=True)
+                        with action:
+                            st.button(label, key=f"dashboard_go_{i}", on_click=navigate if page else open_chart_builder, args=(page,) if page else (), width="stretch")
+                st.caption("Your original file stays available for comparison.")
+        with quality:
+            with st.container(key="dashboard_quality"):
+                st.markdown("### Column completeness")
+                st.caption("Filled cells / records")
+                # Show the columns needing the most attention first, never invented values.
+                counts = (~blank).sum().sort_values(kind="stable").head(5)
+                column_completeness([(str(name), int(count), len(data)) for name, count in counts.items()])
+                st.caption(f"Showing {len(counts)} of {len(data.columns)} columns, least complete first.")
+    with st.container(key="dashboard_records"):
+        heading, search, row_filter = st.columns([1.2, 1.8, 1], vertical_alignment="bottom", gap="medium")
+        with heading:
+            st.markdown("### Dataset records")
+        with search:
+            query = st.text_input("Search Records", placeholder="Search any value…", key="dashboard_search")
+        with row_filter:
+            chosen = st.selectbox("Show Records", ["All Rows", "Rows with Missing Values"], key="dashboard_filter")
+        st.session_state["_preview_csv"] = ctx["kind"] == "csv"
+        preview(data, "dashboard_preview", query, chosen != "All Rows")
+
+
 def dashboard_page(ctx):
-    page_intro(
-        "",
-        "A clear view of your operations",
-        "Choose a view, refine your records, and review the figures before exporting.",
-    )
-    file_line(ctx)
     st.session_state.setdefault(
-        "dashboard_mode", st.session_state.get("_dashboard_mode", "Chart Builder")
+        "dashboard_mode", st.session_state.get("_dashboard_mode", "Overview")
     )
     mode = st.radio(
         "Dashboard Workspace",
-        ["Chart Builder", "Expense Dashboard", "Bills & Cash Flow"],
+        ["Overview", "Chart Builder", "Expense Dashboard", "Bills & Cash Flow"],
         horizontal=True,
         key="dashboard_mode",
     )
     st.session_state["_dashboard_mode"] = mode
-    if mode == "Chart Builder":
+    if mode == "Overview":
+        dashboard_overview(ctx)
+    elif mode == "Chart Builder":
         chart_builder(ctx)
     elif mode == "Expense Dashboard":
         expenses(ctx)
@@ -1061,6 +1122,8 @@ def main():
     install_styles()
     st.session_state.setdefault("page", "Data")
     st.session_state.setdefault("_rules", {key: True for key, _, _ in RULES})
+    with st.container(key="mobile_nav_shell"):
+        mobile_navigation("_input" in st.session_state, st.session_state["page"], mobile_navigate)
     if "_input" not in st.session_state:
         landing()
         footer()
@@ -1070,7 +1133,8 @@ def main():
     with st.container(key="workspace_shell"):
         page = st.session_state["page"]
         try:
-            ctx = context(page)
+            source_panel = dashboard_header() if page == "Dashboard" else None
+            ctx = context(page, source_panel)
             if ctx:
                 {
                     "Data": data_page,

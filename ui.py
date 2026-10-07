@@ -85,8 +85,18 @@ def page_intro(kicker, title, description=""):
 
 
 def motion(mode,page):
-    """Native controls use CSS; Anime runs only inside the supported component."""
+    """Native controls use CSS; animation engines stay inside the component."""
     return None
+
+
+def mobile_navigation(workspace=False, page="", on_navigate=None):
+    _presentation(
+        data={"kind":"navigation", "workspace":workspace, "page":page,
+              "logo":logo(), "fonts":font_css(),
+              "pages":["Data","Clean","Dashboard","Reports","Ask TidyGrid","Export"]},
+        key="mobile_workspace_menu" if workspace else "mobile_landing_menu",
+        on_navigate_change=on_navigate or (lambda: None),
+    )
 
 
 def illustration(name,alt,key,height=300):
@@ -100,8 +110,12 @@ def first_reveal(key):
     return first
 
 
-def result_summary(title,items,key):
-    _presentation(data={'kind':'summary','title':title,'items':[dict(value=str(value),label=label,detail=detail) for value,label,detail in items],'fonts':font_css(),'animate':first_reveal(key)},key=key)
+def result_summary(title,items,key,variant="editorial"):
+    _presentation(data={'kind':'summary','variant':variant,'title':title,'items':[dict(value=str(value),label=label,detail=detail) for value,label,detail in items],'fonts':font_css(),'animate':first_reveal(key)},key=key)
+
+
+def column_completeness(items):
+    _presentation(data={'kind':'quality','items':[dict(label=label,filled=filled,total=total) for label,filled,total in items],'fonts':font_css(),'animate':first_reveal('column_completeness')},key='column_completeness')
 
 
 def render_summary(stats,key):
@@ -181,5 +195,5 @@ def csv_pairs(original, cleaned):
 
 
 def before_after(pairs):
-    _presentation(data={'kind':'comparison','pairs':[[str(v) for v in row] for row in pairs],'fonts':font_css()},key='before_after')
+    _presentation(data={'kind':'comparison','pairs':[[str(v) for v in row] for row in pairs],'fonts':font_css(),'animate':first_reveal('before_after')},key='before_after')
     st.caption('Examples from actual changed cells. ␣ marks a space at the beginning or end.')
