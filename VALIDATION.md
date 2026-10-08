@@ -19,3 +19,9 @@ Earlier browser passes verified actual CSV upload and cleaning toggles, local As
 The complete extracted project must be uploaded, including `.streamlit/config.toml`. Finder hides that folder by default; Command+Shift+Period reveals it. That configuration controls native canvas header colors, which DOM CSS cannot override. Reboot after replacing the configuration. PyArrow is pinned below 25, matching the hosting workaround in the supplied logs.
 
 Browser checks used Chromium emulation, not a physical iPhone or Safari. Streamlit server processing/network time still governs navigation; shortening frontend motion does not remove server latency. Deployment itself has not been changed by this archive. PDF fonts remain Helvetica, Excel fonts Arial, and Ask TidyGrid uses local dataset commands.
+
+## Reference rebuild, October 8
+
+Rebuilt the dashboard using IMG_3064 2.JPG as the layout reference: grouped left rail, slim top bar, three metric cards, wide activity panel and narrow completeness panel sharing a bottom edge, records panel below with right-aligned filters. TidyGrid colors and font families are retained; metrics, rows and completeness values come from the current dataset. Dashboard view selection moved into a top-bar popover. All chart/expense/cash-flow modes remain available.
+
+All 31 regression tests pass. Chromium checks passed for desktop and 320/390/700 px widths, navigation, reduced motion, filtering and toolbar contrast. Repeated with the configuration folder omitted and Dark selected: the toolbar's actual nested button container is white and SVG icons black. Canvas header colors still require the included configuration. Landing links are now The Workspace and Import a Dataset, 18 px with more bottom padding; mobile menu labels are 18 px.

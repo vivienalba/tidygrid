@@ -45,3 +45,5 @@ Tables and native controls do not move. There are no ambient loops, animated cou
 # Native control contrast
 
 The native table toolbar retains visible black icons on a white surface. The former blanket rule that hid dataframe SVGs has been removed. Select controls explicitly keep their open/close indicators black. Include `.streamlit/config.toml` when deploying: its light and dark themes provide yellow canvas-table headers with black header text. Native canvas colors cannot be corrected by DOM CSS alone.
+
+Dashboard composition follows IMG_3064 2.JPG: grouped rail, slim toolbar, three metrics, 2:1 activity/completeness panels, records underneath. Keep existing TidyGrid fonts and palette. Native data actions remain functional; no simulated approvals or invented clinical statistics.

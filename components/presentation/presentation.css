@@ -30,3 +30,9 @@
 .mobile-menu-item{width:100%;min-height:50px;padding:14px 16px;text-align:left;background:transparent;border:0;border-radius:4px;font-size:16px;line-height:1.5}
 .mobile-menu-item[aria-current=page]{background:#72559f;font-weight:600}
 .mobile-menu-item:hover,.menu-close:hover,.menu-toggle:hover{background:#205182}
+
+.mobile-menu-item{font-size:18px;min-height:54px}.mobile-menu-panel{padding-bottom:max(32px,env(safe-area-inset-bottom))}
+.summary-cards .metric{min-height:142px}
+.quality-row{position:relative;padding-left:40px}
+.quality-row::before{content:'C';position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#d4c2ef;font-size:11px;font-weight:600}
+.quality{gap:26px;padding:12px 0 32px}

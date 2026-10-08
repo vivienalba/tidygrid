@@ -209,3 +209,44 @@ input::placeholder,textarea::placeholder{color:#494741!important;-webkit-text-fi
 .st-key-landing_header a:focus-visible{outline-color:#d4c2ef!important}
 /* Server reruns must not restart a page-title entrance. */
 .page-intro{animation:none!important}
+
+/* Reference layout: fixed rail, slim bar, three cards, 2:1 panels, records below. */
+.st-key-landing_header{padding-bottom:32px!important}
+.st-key-landing_header .landing-nav a{font-size:18px!important;line-height:1.5;display:flex;align-items:center;min-height:44px}
+.sidebar-group{font-size:11px;letter-spacing:.06em;color:#d4c2ef;margin:24px 0 8px;padding:0 12px}
+[data-testid=stSidebar] [data-testid=stButton] button{min-height:44px!important}
+.st-key-workspace_shell:has(.st-key-dashboard_header){padding:0 24px 24px!important;gap:16px!important}
+.st-key-dashboard_header{padding:18px 0!important;min-height:72px;margin-bottom:4px}
+.dashboard-bar-title{font-family:var(--display);font-size:22px;font-weight:700}
+.st-key-dashboard_header [data-testid=stHorizontalBlock]{align-items:center!important}
+.st-key-dashboard_review,.st-key-dashboard_quality{min-height:440px;padding:20px!important;display:flex;flex-direction:column;box-sizing:border-box}
+.dashboard-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.dashboard-panel-head h3{font-family:var(--display);font-size:20px!important;margin:0!important;padding:0!important}
+.dashboard-panel-head span{font-size:11px;color:#494741;white-space:nowrap}
+.dashboard-section-label{font-size:11px;color:#494741;margin:10px 0 8px;letter-spacing:.04em}
+.dashboard-idle{font-size:12px!important;color:#494741;margin:0 0 18px!important}
+.review-avatar{height:34px;width:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#d4c2ef;font-size:12px;font-weight:600}
+[class*=st-key-dashboard_action_]{padding:10px 0!important}
+.st-key-dashboard_records{padding:0!important;overflow:hidden}
+.st-key-dashboard_records>[data-testid=stLayoutWrapper]:first-child{padding:18px 20px}
+.st-key-dashboard_records [data-testid=stHorizontalBlock]{padding:18px 20px 0;gap:12px!important}
+.st-key-dashboard_records [data-testid=stDataFrame]{border-left:0!important;border-right:0!important;border-radius:0!important}
+.st-key-dashboard_records [data-testid=stCaptionContainer]{padding:0 20px 16px}
+/* Native toolbar has its own nested panel; set its surface as well as its wrapper. */
+[data-testid=stElementToolbar] > div,[data-testid=stElementToolbar] [data-testid=stToolbar]{background:#fff!important;color:#000!important}
+[data-testid=stElementToolbar] button,[data-testid=stElementToolbar] button:focus{background:#fff!important;color:#000!important}
+@media(max-width:700px){
+ .st-key-mobile_nav_shell{padding-bottom:20px!important}
+ .st-key-workspace_shell:has(.st-key-dashboard_header){padding:0 16px 24px!important}
+ .st-key-dashboard_header{padding:16px 0!important}
+ .st-key-dashboard_review,.st-key-dashboard_quality{min-height:0}
+ .st-key-dashboard_records [data-testid=stHorizontalBlock]{padding:16px}
+ [class*=st-key-dashboard_action_] [data-testid=stHorizontalBlock]{flex-wrap:nowrap!important}
+ [class*=st-key-dashboard_action_] [data-testid=stColumn]{width:auto!important;flex:initial!important}
+ [class*=st-key-dashboard_action_] [data-testid=stColumn]:nth-child(1){flex:0 0 34px!important}
+ [class*=st-key-dashboard_action_] [data-testid=stColumn]:nth-child(2){flex:1 1 0!important}
+ [class*=st-key-dashboard_action_] [data-testid=stColumn]:nth-child(3){flex:0 0 90px!important}
+ .dashboard-panel-head{flex-wrap:wrap}
+}
+
+[data-testid=stSidebar] [data-testid=stButton] button p{font-size:14px!important}

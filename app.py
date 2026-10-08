@@ -181,16 +181,19 @@ def sidebar():
     with st.sidebar:
         st.markdown(logo(True), unsafe_allow_html=True)
         st.button("Back to Home", key="back_home", on_click=go_home, width="stretch")
-        for page, icon in zip(PAGES, ICONS):
-            st.button(
-                page,
-                key="nav_" + page,
-                type="primary" if st.session_state["page"] == page else "tertiary",
-                width="stretch",
-                icon=None if icon in {"download", "upload", "arrow_back"} else f":material/{icon}:",
-                on_click=navigate,
-                args=(page,),
-            )
+        groups = [("WORKSPACE", ["Dashboard", "Data", "Clean"]),
+                  ("OPERATIONS", ["Reports", "Ask TidyGrid"]),
+                  ("OUTPUT", ["Export"])]
+        for group, pages in groups:
+            st.markdown(f'<div class="sidebar-group">{group}</div>', unsafe_allow_html=True)
+            for page in pages:
+                icon = ICONS[PAGES.index(page)]
+                st.button(
+                    page, key="nav_" + page,
+                    type="primary" if st.session_state["page"] == page else "tertiary",
+                    width="stretch", icon=f":material/{icon}:",
+                    on_click=navigate, args=(page,),
+                )
 
 
 def uploader(compact=False):
@@ -265,7 +268,7 @@ def landing():
         with brand:
             st.markdown(logo(), unsafe_allow_html=True)
         with links:
-            st.markdown('<nav class="landing-nav"><a href="#the-workspace">The workspace</a><a href="#import-dataset">Import data</a></nav>', unsafe_allow_html=True)
+            st.markdown('<nav class="landing-nav"><a href="#the-workspace">The Workspace</a><a href="#import-dataset">Import a Dataset</a></nav>', unsafe_allow_html=True)
     with st.container(key="hero"):
         artwork, copy = st.columns(2, gap="large", vertical_alignment="center")
         with artwork:
@@ -794,9 +797,13 @@ def expenses(ctx):
 
 def dashboard_header():
     with st.container(key="dashboard_header"):
-        title, source, ask = st.columns([2.6, 1.6, 1.1], vertical_alignment="center", gap="small")
+        title, view, source, ask = st.columns([3, 1.3, 1.7, 1.3], vertical_alignment="center", gap="small")
         with title:
-            st.markdown("# Dashboard")
+            st.markdown('<div class="dashboard-bar-title" role="heading" aria-level="1">Dashboard</div>', unsafe_allow_html=True)
+        with view:
+            with st.popover("Dashboard view", width="stretch"):
+                st.session_state.setdefault("dashboard_mode", "Overview")
+                st.radio("Dashboard Workspace", ["Overview", "Chart Builder", "Expense Dashboard", "Bills & Cash Flow"], key="dashboard_mode")
         with source:
             source_panel = st.popover("Source & Import Settings", width="stretch")
         with ask:
@@ -817,8 +824,7 @@ def dashboard_overview(ctx):
         review, quality = st.columns([2, 1], gap="medium")
         with review:
             with st.container(key="dashboard_review"):
-                st.markdown("### Your data, ready for review")
-                st.caption("Choose your next step")
+                st.markdown('<div class="dashboard-panel-head"><h3>Dataset activity</h3><span>5 available actions</span></div><div class="dashboard-section-label">READY FOR REVIEW</div>', unsafe_allow_html=True)
                 actions = [
                     ("Review your records", f"{len(data):,} records, with originals and changes available.", "Review", "Data"),
                     ("Refine your dataset", "Choose cleaning rules and inspect the values that change.", "Refine", "Clean"),
@@ -828,16 +834,18 @@ def dashboard_overview(ctx):
                 ]
                 for i, (title, description, label, page) in enumerate(actions):
                     with st.container(key=f"dashboard_action_{i}"):
-                        text, action = st.columns([3.2, 1.1], vertical_alignment="center", gap="small")
+                        badge, text, action = st.columns([.35, 3.2, .9], vertical_alignment="center", gap="small")
+                        with badge:
+                            st.markdown(f'<div class="review-avatar">{["D", "R", "C", "P", "E"][i]}</div>', unsafe_allow_html=True)
                         with text:
                             st.markdown(f'<div class="review-title">{html.escape(title)}</div><p class="review-description">{html.escape(description)}</p>', unsafe_allow_html=True)
                         with action:
                             st.button(label, key=f"dashboard_go_{i}", on_click=navigate if page else open_chart_builder, args=(page,) if page else (), width="stretch")
-                st.caption("Your original file stays available for comparison.")
+                st.markdown('<div class="dashboard-section-label">WORKING ON</div><p class="dashboard-idle">Choose an action above to continue.</p>', unsafe_allow_html=True)
+                st.caption("Original preserved · All actions use your current dataset")
         with quality:
             with st.container(key="dashboard_quality"):
-                st.markdown("### Column completeness")
-                st.caption("Filled cells / records")
+                st.markdown('<div class="dashboard-panel-head"><h3>Column completeness</h3><span>Filled / total</span></div>', unsafe_allow_html=True)
                 # Show the columns needing the most attention first, never invented values.
                 counts = (~blank).sum().sort_values(kind="stable").head(5)
                 column_completeness([(str(name), int(count), len(data)) for name, count in counts.items()])
@@ -847,9 +855,9 @@ def dashboard_overview(ctx):
         with heading:
             st.markdown("### Dataset records")
         with search:
-            query = st.text_input("Search Records", placeholder="Search any value…", key="dashboard_search")
+            query = st.text_input("Search Records", placeholder="Search records", key="dashboard_search", label_visibility="collapsed")
         with row_filter:
-            chosen = st.selectbox("Show Records", ["All Rows", "Rows with Missing Values"], key="dashboard_filter")
+            chosen = st.selectbox("Show Records", ["All Rows", "Rows with Missing Values"], key="dashboard_filter", label_visibility="collapsed")
         st.session_state["_preview_csv"] = ctx["kind"] == "csv"
         preview(data, "dashboard_preview", query, chosen != "All Rows")
 
@@ -858,12 +866,7 @@ def dashboard_page(ctx):
     st.session_state.setdefault(
         "dashboard_mode", st.session_state.get("_dashboard_mode", "Overview")
     )
-    mode = st.radio(
-        "Dashboard Workspace",
-        ["Overview", "Chart Builder", "Expense Dashboard", "Bills & Cash Flow"],
-        horizontal=True,
-        key="dashboard_mode",
-    )
+    mode = st.session_state["dashboard_mode"]
     st.session_state["_dashboard_mode"] = mode
     if mode == "Overview":
         dashboard_overview(ctx)

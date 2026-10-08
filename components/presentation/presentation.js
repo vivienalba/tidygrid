@@ -19,7 +19,7 @@ export default function({parentElement,data,setTriggerValue}) {
   const panel=make('div','mobile-menu-panel'),head=make('div','mobile-menu-head');
   const title=make('div','mobile-menu-title','TidyGrid'),close=make('button','menu-close','Close');close.type='button';head.append(title,close);panel.append(head);
   const nav=make('nav','mobile-menu-links');nav.setAttribute('aria-label','Main navigation');panel.append(nav);
-  const items=data.workspace?[['Back to Home','Home'],...data.pages.map(p=>[p,p])]:[['The workspace','#the-workspace'],['Import data','#import-dataset']];
+  const items=data.workspace?[['Back to Home','Home'],...data.pages.map(p=>[p,p])]:[['The Workspace','#the-workspace'],['Import a Dataset','#import-dataset']];
   for(const[label,value]of items){const item=make('button','mobile-menu-item',label);item.type='button';item.dataset.destination=value;if(value===data.page)item.setAttribute('aria-current','page');nav.append(item)}
   dialog.append(panel);root.append(dialog);
  }else if(data.kind==='art'){
