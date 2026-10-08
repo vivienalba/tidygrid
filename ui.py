@@ -21,7 +21,7 @@ _COMPONENT_JS="const tidyGSAP={};\n(function(exports,module){\n"+_GSAP_SOURCE+"\
 
 def install_styles():
     global _presentation
-    # Register through the public API once per script execution, including fresh runtimes.
+    # Register through the public API for this execution's Streamlit runtime.
     _presentation=components_v2.component('tidygrid_presentation', html='<style class="fonts"></style><div class="presentation"></div>', css=_COMPONENT_CSS, js=_COMPONENT_JS)
     st.markdown('<style>'+font_css()+(ROOT/'assets/design-system.css').read_text()+'</style>',unsafe_allow_html=True)
 

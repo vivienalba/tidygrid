@@ -13,6 +13,10 @@ python -m streamlit run app.py
 
 Upload every extracted file and folder to the root of `vivienalba/tidygrid`, including `assets`, `static`, `components`, and `.streamlit`. In Streamlit Community Cloud select branch `main`, main file **app.py**, and Python 3.12. The ZIP is a flat project root. No JavaScript build, CDN or API key is required. This delivery does not automatically publish to GitHub or Streamlit Cloud.
 
+## Deployment updates
+
+Startup fingerprints `ui.py` and the bundled presentation files before importing UI helpers. If a running Streamlit process retains the previous module after an update, the app reloads it once from the current files. Ordinary reruns reuse the loaded module. Keep the complete project together when updating it.
+
 ## Fonts
 
 HK Grotesk headings and Metropolis body/table fonts are included in `static/fonts`, in regular, semibold and bold weights. The uploaded font ZIPs were unavailable, so the actual fonts were obtained from Hanken Design and Typehaus public distributions. Their licenses are included. Streamlit static serving is enabled in `.streamlit/config.toml`; no font CDN is used. The offline HTML embeds the fonts. PDF reports use Helvetica; Excel reports use Arial. See `assets/fonts/README.md` for provenance.
@@ -39,7 +43,7 @@ All eight original SVG references are retained under `assets/references`. Detail
 
 Result summaries follow the lavender “year in numbers” reference. Tabulated results use yellow headers, a lavender label column, centered text, sharp edges and solid black grid lines. A “Sort and explore this table” disclosure retains the interactive data grid for results. Dataset previews keep the native searchable grid; Streamlit controls its canvas header alignment.
 
-Bundled GSAP v3.15.0 handles the mobile drawer, illustration/card entrances, completeness bars, comparison rows and subtle illustration hover feedback. Anime.js v4.5.0 handles changed summary-value opacity. Both run within the supported Streamlit v2 component lifecycle, with scoped cleanup and reduced-motion support. Entrances run once per component per session and only when visible. Unchanged components are not rebuilt on ordinary reruns. Tables and chart controls remain stable. Native controls have short color feedback. Streamlit server reruns still govern page navigation; continuous whole-page morphs are not available. At 700 px and below, an accessible hamburger menu replaces the sidebar. Tables scroll horizontally. Mobile features use consistent side padding and compact, borderless action buttons.
+Bundled GSAP v3.15.0 handles the mobile drawer, short opacity entrances and completeness bars. Mobile navigation dispatches immediately; the drawer opens in 200 ms and closes in 120 ms. Decorative illustration hover and repeated title entrances have been removed. Anime.js v4.5.0 handles changed summary-value opacity over 100 ms. Both run within the supported Streamlit v2 component lifecycle, with scoped cleanup and reduced-motion support. Entrances run once per component per session and only when visible. Unchanged components are not rebuilt on ordinary reruns. Tables and chart controls remain stable. Native controls have short color feedback. Streamlit server reruns still govern page navigation; continuous whole-page morphs are not available. At 700 px and below, an accessible hamburger menu replaces the sidebar. Tables scroll horizontally. Mobile features use consistent side padding and compact, borderless action buttons.
 
 ## Verify
 
@@ -49,3 +53,7 @@ python -m pytest -q
 ```
 
 See DESIGN.md and VALIDATION.md.
+
+## Latest interface update
+
+Desktop and mobile navigation use solid black with white labels. Table toolbar icons are visible on white, and dropdown indicators remain readable. Keep `.streamlit/config.toml` in the repository; it sets yellow table headers with black text in both light and dark preference modes. Finder hides the `.streamlit` folder by default: press Command+Shift+Period to show it before uploading the extracted project. Reboot the Streamlit app after changing the configuration. The project pins PyArrow below 25, matching the hosting workaround shown in the supplied deployment logs.

@@ -7,6 +7,25 @@ from streamlit.testing.v1 import AppTest
 from test_workbooks import fixture
 APP=Path(__file__).with_name('app.py')
 RAW=b'Name,Email,Mobile,Amount,Category\n Alice ,ALICE@EMAIL.COM ,0917-123-4567,100,Sales\nBob,,0918 222 3333,200,Service\n Alice ,ALICE@EMAIL.COM ,0917-123-4567,100,Sales\n'
+
+def test_startup_refreshes_stale_ui(monkeypatch):
+    import ui
+
+    # A running server may still hold the helpers from the previous deploy.
+    monkeypatch.delattr(ui, "column_completeness")
+    monkeypatch.delattr(ui, "mobile_navigation")
+    monkeypatch.setattr(ui, "_tidygrid_source_signature", "previous-deploy", raising=False)
+    monkeypatch.setattr(ui, "_COMPONENT_CSS", "previous component styles")
+    at = AppTest.from_file(str(APP), default_timeout=15).run()
+    assert not at.exception
+    assert callable(ui.column_completeness)
+    assert callable(ui.mobile_navigation)
+    assert ui._COMPONENT_CSS == (APP.parent / "components/presentation/presentation.css").read_text()
+    navigation = ui.mobile_navigation
+    at.run()
+    assert not at.exception
+    assert ui.mobile_navigation is navigation
+
 def app_input(name='records.csv',raw=RAW):
     at=AppTest.from_file(str(APP),default_timeout=15).run()
     at.session_state['_input']=(name,raw,False)

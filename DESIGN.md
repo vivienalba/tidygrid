@@ -22,13 +22,13 @@ Result summaries retain the lavender “year in numbers” structure. Tabulated 
 
 # Color and type
 
-Navigation and the workspace background use solid cream #f5f7ee with black text. Lavender #d4c2ef identifies active navigation, landing actions and selected summary surfaces. Yellow #f6d46b supports the hero and table headers. Purple #72559f identifies completeness bars and the Ask introduction. Blue #205182 provides focus outlines and the Ask form action. Landing buttons use #fff3db on hover. Gradients remain concentrated in artwork and scenario panels.
+Navigation uses solid black #000000 with white #ffffff text on desktop and mobile. Purple #72559f marks the active workspace destination and blue #205182 marks hover. The workspace keeps its cream #f5f7ee background. Lavender #d4c2ef identifies landing actions and selected summary surfaces. Yellow #f6d46b supports the hero and table headers. Purple #72559f identifies completeness bars and the Ask introduction. Blue #205182 provides focus outlines and the Ask form action. Landing buttons use #fff3db on hover. Gradients remain concentrated in artwork and scenario panels.
 
 HK Grotesk headings and Metropolis body/table text are served locally in weights 400, 600 and 700. Actual font files and their licenses are included. Font styling has not been copied from the dashboard photo.
 
 # Responsive layout
 
-At 700 px and below, a cream mobile header replaces the desktop navigation with a hamburger menu. Its modal drawer uses native dialog focus trapping, Escape dismissal, focus restoration and buttons at least 44 px tall. Workspace destinations use the Streamlit component trigger callback; landing destinations scroll to real section anchors. The desktop sidebar returns above that breakpoint.
+At 700 px and below, a black mobile header replaces the desktop navigation with a hamburger menu. Its modal drawer uses native dialog focus trapping, Escape dismissal, focus restoration and buttons at least 44 px tall. Workspace destinations use the Streamlit component trigger callback; landing destinations scroll to real section anchors. The desktop sidebar returns above that breakpoint.
 
 The mobile capabilities section has 24 px horizontal padding, 16 px gaps within features, 40 px between features, 40 px top padding and 44 px bottom padding. Headings and descriptions are centered, with compact borderless lavender action buttons and 14 px labels. Native Markdown's negative bottom margin is reset within this section so the description/button gap is real.
 
@@ -36,8 +36,12 @@ The import heading, panel and upload control are centered. The hidden native hea
 
 # Motion ownership
 
-GSAP owns illustration entrances and hover feedback, summary-card entrances, completeness-bar reveals, comparison-row entrances and the mobile drawer. Entrances use short opacity/transform transitions, a small stagger and power-out easing. The drawer opens in 240 ms and closes in 160 ms. Illustration hover feedback lasts 220 ms and is restricted to fine pointers. Content is visible before animation initializes.
+GSAP owns short, once-only opacity entrances, completeness-bar reveals and the mobile drawer. The drawer opens in 200 ms and closes in 120 ms. Navigation callbacks fire at the click, without waiting for the closing tween. Decorative illustration hover movement and the native page-title entrance have been removed. Summary cards and comparison rows fade briefly without moving their text; completeness bars reveal over 220 ms. Content remains visible before animation initializes.
 
-Anime.js owns a 140 ms opacity transition on changed summary values. It does not animate GSAP's targets. Both engines are bundled and run within the public Streamlit v2 component lifecycle. Cleanup removes observers/listeners and reverts scoped animations; reduced-motion preferences remove motion, including when changed at runtime. IntersectionObserver limits entrances to visible content, and session state avoids replaying entrances on ordinary filters and navigation.
+Anime.js owns a 100 ms opacity transition on changed summary values. It does not animate GSAP's targets. Both engines are bundled and run within the public Streamlit v2 component lifecycle. Stable component data reuses existing local DOM/listeners where the lifecycle permits; the latest trigger callback is retained. Cleanup removes observers/listeners and reverts scoped animations. Reduced-motion preferences remove motion, including when changed at runtime. IntersectionObserver limits entrances to visible content, and session state avoids replaying entrances on ordinary filters and navigation.
 
 Tables and native controls do not move. There are no ambient loops, animated counters, scroll-jacking or dependencies on a CDN. Streamlit server reruns still determine page-navigation latency; whole-page morphs are not attempted.
+
+# Native control contrast
+
+The native table toolbar retains visible black icons on a white surface. The former blanket rule that hid dataframe SVGs has been removed. Select controls explicitly keep their open/close indicators black. Include `.streamlit/config.toml` when deploying: its light and dark themes provide yellow canvas-table headers with black header text. Native canvas colors cannot be corrected by DOM CSS alone.

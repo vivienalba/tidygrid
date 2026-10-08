@@ -4,6 +4,9 @@ export default function({parentElement,data,setTriggerValue}) {
  const fontStyle=parentElement.querySelector('.fonts');if(fontStyle.textContent!==data.fonts)fontStyle.textContent=data.fonts||'';
  const {fonts,animate:entrance,...content}=data;const signature=JSON.stringify(content);
  const changed=root.dataset.signature!==signature;
+ root._trigger=setTriggerValue;
+ // Keep stable surfaces and listeners when a widget causes an unrelated rerun.
+ if(!changed&&root._dispose)return root._dispose;
  root._dispose?.();
  if(changed){
  root.dataset.signature=signature;root.replaceChildren();root.className='presentation '+data.kind;
@@ -48,15 +51,17 @@ export default function({parentElement,data,setTriggerValue}) {
   let timeline,disposed=false;const context=gsap?.context(()=>{},root);
   const tween=fn=>context?context.add(fn):fn();
   const finish=()=>{if(!dialog.open)return;dialog.close();toggle.setAttribute('aria-expanded','false');toggle.focus({preventScroll:true})};
-  const hide=(done)=>{timeline?.kill();toggle.setAttribute('aria-expanded','false');if(!gsap||reduced.matches){finish();done?.();return}tween(()=>{timeline=gsap.timeline({onComplete:()=>{finish();done?.()}}).to(panel,{x:-20,opacity:0,duration:.16,ease:'power2.in'},0).to(dialog,{opacity:0,duration:.16},0)})};
-  const show=()=>{timeline?.kill();if(!dialog.open)dialog.showModal();toggle.setAttribute('aria-expanded','true');close.focus({preventScroll:true});if(!gsap||reduced.matches){dialog.style.opacity='1';panel.style.opacity='1';panel.style.transform='none';return}tween(()=>{timeline=gsap.timeline().fromTo(dialog,{opacity:0},{opacity:1,duration:.18,ease:'power2.out'},0).fromTo(panel,{x:-24,opacity:.7},{x:0,opacity:1,duration:.24,ease:'power3.out'},0)})};
+  const hide=()=>{timeline?.kill();toggle.setAttribute('aria-expanded','false');if(!gsap||reduced.matches){finish();return}tween(()=>{timeline=gsap.timeline({onComplete:finish}).to(panel,{x:-16,opacity:0,duration:.12,ease:'power2.in'},0).to(dialog,{opacity:0,duration:.12},0)})};
+  const show=()=>{timeline?.kill();if(!dialog.open)dialog.showModal();toggle.setAttribute('aria-expanded','true');close.focus({preventScroll:true});if(!gsap||reduced.matches){dialog.style.opacity='1';panel.style.opacity='1';panel.style.transform='none';return}tween(()=>{timeline=gsap.timeline().fromTo(dialog,{opacity:0},{opacity:1,duration:.12,ease:'power2.out'},0).fromTo(panel,{x:-16,opacity:.85},{x:0,opacity:1,duration:.2,ease:'power3.out'},0)})};
   const cancel=e=>{e.preventDefault();hide()};const backdrop=e=>{if(e.target===dialog)hide()};
   const choose=e=>{const button=e.target.closest('[data-destination]');if(!button)return;const target=button.dataset.destination;
-   hide(()=>{if(disposed)return;if(target.startsWith('#')){const section=document.getElementById(target.slice(1));section?.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'})}else{setTriggerValue('navigate',target)}});
+   hide();
+   // Dispatch immediately; the server request must not wait for the exit tween.
+   if(target.startsWith('#')){const section=document.getElementById(target.slice(1));section?.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'})}else{root._trigger('navigate',target)}
   };
   const change=()=>{timeline?.kill();context?.revert();if(desktop.matches){finish()}else if(dialog.open){dialog.style.opacity='1';panel.style.opacity='1';panel.style.transform='none'}};
   const closeClick=()=>hide();toggle.addEventListener('click',show);close.addEventListener('click',closeClick);dialog.addEventListener('cancel',cancel);dialog.addEventListener('click',backdrop);panel.addEventListener('click',choose);reduced.addEventListener('change',change);desktop.addEventListener('change',change);
-  const dispose=()=>{disposed=true;timeline?.kill();context?.revert();if(dialog.open)dialog.close();toggle.removeEventListener('click',show);close.removeEventListener('click',closeClick);dialog.removeEventListener('cancel',cancel);dialog.removeEventListener('click',backdrop);panel.removeEventListener('click',choose);reduced.removeEventListener('change',change);desktop.removeEventListener('change',change)};
+  const dispose=()=>{if(disposed)return;disposed=true;timeline?.kill();context?.revert();if(dialog.open)dialog.close();toggle.removeEventListener('click',show);close.removeEventListener('click',closeClick);dialog.removeEventListener('cancel',cancel);dialog.removeEventListener('click',backdrop);panel.removeEventListener('click',choose);reduced.removeEventListener('change',change);desktop.removeEventListener('change',change);if(root._dispose===dispose)root._dispose=undefined};
   root._dispose=dispose;return dispose;
  }
  let media,scope,disposed=false;
@@ -68,24 +73,19 @@ export default function({parentElement,data,setTriggerValue}) {
    let observer;
    const enter=()=>ctx.add(()=>{
     if(disposed)return;
-    const tl=gsap.timeline({defaults:{duration:.3,ease:'power2.out'}});
-    if(data.kind==='art')tl.fromTo(root.querySelector('img'),{opacity:.65,y:12},{opacity:1,y:0,duration:.38,clearProps:'opacity,transform'});
-    if(data.kind==='summary')tl.fromTo(root.querySelectorAll('.metric'),{opacity:.65,y:7},{opacity:1,y:0,stagger:.045,clearProps:'opacity,transform'});
-    if(data.kind==='quality')tl.fromTo(root.querySelectorAll('.quality-fill'),{scaleX:0},{scaleX:1,transformOrigin:'left center',duration:.4,stagger:.04,clearProps:'transform'});
-    if(data.kind==='comparison')tl.fromTo(root.querySelectorAll('.compare-row'),{opacity:.7,y:5},{opacity:1,y:0,stagger:.035,clearProps:'opacity,transform'});
+    const tl=gsap.timeline({defaults:{duration:.16,ease:'power2.out'}});
+    if(data.kind==='art')tl.fromTo(root.querySelector('img'),{opacity:.85},{opacity:1,duration:.22,clearProps:'opacity'});
+    if(data.kind==='summary')tl.fromTo(root.querySelectorAll('.metric'),{opacity:.85},{opacity:1,stagger:.02,clearProps:'opacity'});
+    if(data.kind==='quality')tl.fromTo(root.querySelectorAll('.quality-fill'),{scaleX:0},{scaleX:1,transformOrigin:'left center',duration:.22,stagger:.02,clearProps:'transform'});
+    if(data.kind==='comparison')tl.fromTo(root.querySelectorAll('.compare-row'),{opacity:.85},{opacity:1,clearProps:'opacity'});
    });
    if(entrance){observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();enter()}},{threshold:.1});observer.observe(root)}
-   const img=root.querySelector('img');
-   // One interruptible hover tween, with no decorative loop or scroll listener.
-   const over=()=>ctx.add(()=>gsap.to(img,{y:-4,duration:.22,ease:'power2.out',overwrite:'auto'}));
-   const out=()=>ctx.add(()=>gsap.to(img,{y:0,duration:.22,ease:'power2.out',overwrite:'auto',clearProps:'transform'}));
-   if(img&&ctx.conditions.hover){root.addEventListener('pointerenter',over);root.addEventListener('pointerleave',out)}
    // Anime owns only value opacity on a changed summary, never GSAP's card transform.
-   if(changed&&!entrance&&data.kind==='summary'&&globalThis.anime){scope=globalThis.anime.createScope({root}).add(()=>globalThis.anime.animate(root.querySelectorAll('.metric-value'),{opacity:[.7,1],duration:140,ease:'out(3)'}))}
-   return()=>{observer?.disconnect();root.removeEventListener('pointerenter',over);root.removeEventListener('pointerleave',out);scope?.revert()};
+   if(changed&&!entrance&&data.kind==='summary'&&globalThis.anime){scope=globalThis.anime.createScope({root}).add(()=>globalThis.anime.animate(root.querySelectorAll('.metric-value'),{opacity:[.85,1],duration:100,ease:'out(3)'}))}
+   return()=>{observer?.disconnect();scope?.revert()};
   },root);
  }
- const dispose=()=>{if(disposed)return;disposed=true;media?.revert();scope?.revert()};
+ const dispose=()=>{if(disposed)return;disposed=true;media?.revert();scope?.revert();if(root._dispose===dispose)root._dispose=undefined};
  root._dispose=dispose;
  return dispose;
 }
