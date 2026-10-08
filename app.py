@@ -263,17 +263,13 @@ def footer():
 
 
 def landing():
-    with st.container(key="landing_header"):
-        brand, links = st.columns(2, vertical_alignment="center")
-        with brand:
-            st.markdown(logo(), unsafe_allow_html=True)
-        with links:
-            st.markdown('<nav class="landing-nav"><a href="#the-workspace">The Workspace</a><a href="#import-dataset">Import a Dataset</a></nav>', unsafe_allow_html=True)
     with st.container(key="hero"):
         artwork, copy = st.columns(2, gap="large", vertical_alignment="center")
         with artwork:
             illustration("art/reference-r3.webp", "Illustrated caretaker at work outdoors", "hero_art", 380)
         with copy:
+            with st.container(key="hero_brand"):
+                st.markdown(logo(), unsafe_allow_html=True)
             st.markdown('<h1 class="hero-title"><strong>Clean data.</strong><br><span>Clear direction.</span></h1><p class="hero-copy">A little order makes room for bigger things. Clean your spreadsheets, explore the patterns, and turn everyday operations into useful reports.</p>', unsafe_allow_html=True)
             with st.container(key="hero_actions"):
                 a, b = st.columns(2)
@@ -1148,8 +1144,9 @@ def main():
     install_styles()
     st.session_state.setdefault("page", "Data")
     st.session_state.setdefault("_rules", {key: True for key, _, _ in RULES})
-    with st.container(key="mobile_nav_shell"):
-        mobile_navigation("_input" in st.session_state, st.session_state["page"], mobile_navigate)
+    if "_input" in st.session_state:
+        with st.container(key="mobile_nav_shell"):
+            mobile_navigation(True, st.session_state["page"], mobile_navigate)
     if "_input" not in st.session_state:
         landing()
         footer()
