@@ -2,6 +2,7 @@
 
 import hashlib
 import html
+import importlib
 import io
 import zipfile
 from datetime import date
@@ -10,6 +11,29 @@ from xml.etree.ElementTree import ParseError
 import altair as alt
 import pandas as pd
 import streamlit as st
+
+# Streamlit reruns app.py, but Python can retain ui.py from before a deploy.
+# Refresh that module before importing helpers added by the new app version.
+import ui as _ui_module
+
+ROOT = Path(__file__).resolve().parent
+_ui_sources = (
+    ROOT / "ui.py",
+    ROOT / "components/presentation/presentation.css",
+    ROOT / "components/presentation/presentation.js",
+    ROOT / "components/presentation/vendor/gsap.min.js",
+    ROOT / "components/presentation/vendor/anime.umd.min.js",
+)
+_ui_digest = hashlib.sha256()
+for _ui_source in _ui_sources:
+    _ui_digest.update(_ui_source.read_bytes())
+    _ui_digest.update(b"\0")
+_ui_signature = _ui_digest.hexdigest()
+if getattr(_ui_module, "_tidygrid_source_signature", None) != _ui_signature:
+    importlib.invalidate_caches()
+    importlib.reload(_ui_module)
+    _ui_module._tidygrid_source_signature = _ui_signature
+
 from ui import centered_dataframe
 from analytics import (
     COLORS,
@@ -44,7 +68,6 @@ from workbook_cleaner import WorkbookSource, clean_workbook
 
 PAGES = ["Data", "Clean", "Dashboard", "Reports", "Ask TidyGrid", "Export"]
 ICONS = ["table", "tune", "bar_chart", "description", "chat_bubble_outline", "download"]
-ROOT = Path(__file__).parent
 
 
 def clear_views():
